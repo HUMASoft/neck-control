@@ -1,0 +1,3 @@
+[submodule "neck-control/lib/CiA402Device"]
+	path = neck-control/lib/CiA402Device
+	url = https://github.com/HUMASoft/CiA402Device.git
