@@ -1,3 +1,6 @@
 [submodule "lib/CiA402Device"]
 	path = lib/CiA402Device
 	url = https://github.com/HUMASoft/CiA402Device.git
+[submodule "lib/fcontrol"]
+	path = lib/fcontrol
+	url = https://github.com/munozyanez/fcontrol.git
