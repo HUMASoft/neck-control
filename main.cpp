@@ -11,13 +11,13 @@ using namespace std;
 
 int main()
 {
-    SocketCanPort pm1;
+    SocketCanPort pm1("vcan0");
     double status_m1;
    // PIDBlock pid_m1;
     CiA402Device m1 (6, &pm1);
-    SocketCanPort pm2;
+    SocketCanPort pm2("vcan0");
     CiA402Device m2 (14, &pm2);
-    SocketCanPort pm3;
+    SocketCanPort pm3("vcan0");
     CiA402Device m3 (8, &pm3);
      m1.Reset();
 //     m2.Reset();
