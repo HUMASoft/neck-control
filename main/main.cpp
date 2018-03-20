@@ -3,11 +3,33 @@
 #include "Cia402device.h"
 #include "CiA301CommPort.h"
 #include "SocketCanPort.h"
+#include <thread>
 //#include "src/PIDBlock.h"
 
 
 
 using namespace std;
+void funcion1(CiA402Device * ob){
+    ob->Reset();
+    ob->SwitchOn();
+    cout<<"Estado motor 1:\n"<<endl;
+    ob->PrintStatus();
+
+}
+void funcion2(CiA402Device * ob){
+    ob->Reset();
+    ob->SwitchOn();
+    cout<<"Estado motor 2:\n"<<endl;
+    ob->PrintStatus();
+}
+void funcion3(CiA402Device * ob){
+    ob->Reset();
+    ob->SwitchOn();
+    cout<<"Estado motor 3:\n"<<endl;
+    ob->PrintStatus();
+}
+
+
 
 int main()
 {
@@ -19,6 +41,8 @@ int main()
     CiA402Device m2 (14, &pm2);
     SocketCanPort pm3("vcan0");
     CiA402Device m3 (8, &pm3);
+
+     thread th (funcion1,&m1); thread th2 (funcion2,&m2); thread th3 (funcion3,&m3);
      m1.Reset();
 //     m2.Reset();
 //     m3.Reset();

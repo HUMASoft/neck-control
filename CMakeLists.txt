@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -pthread" )
 
 #main library with local functions and interfaces to external libraries.
 add_subdirectory(${PROJECT_SOURCE_DIR}/lib/)

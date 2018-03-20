@@ -59,6 +59,7 @@ long TableKinematics::Initialize(string csvfileName, vector<int> tableDimensions
 
             if( (i1!=i) | (i2!=j) )
             {
+                //cout << "line : " << line;
                 cout << "index : ";
                 cout << "i " << i << ", i1 " << i1 << ", j " << j << ", i2 " << i2 << endl;
             }
