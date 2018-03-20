@@ -25,6 +25,7 @@ class TableKinematics : public Kinematics
 {
 public:
     TableKinematics();
+    long GetIK(long theta, long phi, vector<double> &lengths);
 
 private:
     long Initialize(string csvfileName, vector<int> tableDimensions);
