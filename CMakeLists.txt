@@ -18,6 +18,9 @@ target_link_libraries( kinematics mainlib )
 add_executable(position-control main/position-control.cpp)
 target_link_libraries( position-control mainlib )
 
+add_executable(openloop main/openloop.cpp)
+target_link_libraries( openloop mainlib )
+
 
 
 
