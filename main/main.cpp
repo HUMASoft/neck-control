@@ -34,13 +34,11 @@ void funcion3(CiA402Device * ob){
 int main()
 {
     SocketCanPort pm1("can0");
-
-   // PIDBlock pid_m1;
-    CiA402Device m1 (6, &pm1);
+    CiA402Device m1 (1, &pm1);
     SocketCanPort pm2("can0");
-    CiA402Device m2 (14, &pm2);
+    CiA402Device m2 (2, &pm2);
     SocketCanPort pm3("can0");
-    CiA402Device m3 (8, &pm3);
+    CiA402Device m3 (3, &pm3);
 
      thread th (funcion1,&m1); thread th2 (funcion2,&m2); thread th3 (funcion3,&m3);
      m1.Reset();

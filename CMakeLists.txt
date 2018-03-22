@@ -15,5 +15,9 @@ target_link_libraries( main CiA402Device fcontrol )
 add_executable(kinematics main/kinematics.cpp)
 target_link_libraries( kinematics mainlib )
 
+add_executable(position-control main/position-control.cpp)
+target_link_libraries( position-control mainlib )
+
+
 
 
