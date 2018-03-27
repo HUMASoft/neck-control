@@ -4,30 +4,32 @@
 #include "CiA301CommPort.h"
 #include "SocketCanPort.h"
 #include <thread>
-//#include "src/PIDBlock.h"
-
+#include "PIDBlock.h"
+#include "mainlib.h"
 
 
 using namespace std;
-void funcion1(CiA402Device * ob){
-    ob->Reset();
-    ob->SwitchOn();
-    cout<<"Estado motor 1:\n"<<endl;
-    ob->PrintStatus();
+PIDBlock pid (2,0,0,0.01);
 
-}
-void funcion2(CiA402Device * ob){
-    ob->Reset();
-    ob->SwitchOn();
-    cout<<"Estado motor 2:\n"<<endl;
-    ob->PrintStatus();
-}
-void funcion3(CiA402Device * ob){
-    ob->Reset();
-    ob->SwitchOn();
-    cout<<"Estado motor 3:\n"<<endl;
-    ob->PrintStatus();
-}
+//void funcion1(CiA402Device * ob){
+//    ob->Reset();
+//    ob->SwitchOn();
+//    cout<<"Estado motor 1:\n"<<endl;
+//    ob->PrintStatus();
+
+//}
+//void funcion2(CiA402Device * ob){
+//    ob->Reset();
+//    ob->SwitchOn();
+//    cout<<"Estado motor 2:\n"<<endl;
+//    ob->PrintStatus();
+//}
+//void funcion3(CiA402Device * ob){
+//    ob->Reset();
+//    ob->SwitchOn();
+//    cout<<"Estado motor 3:\n"<<endl;
+//    ob->PrintStatus();
+//}
 
 
 
@@ -35,20 +37,79 @@ int main()
 {
     SocketCanPort pm1("can0");
     CiA402Device m1 (1, &pm1);
-    SocketCanPort pm2("can0");
-    CiA402Device m2 (2, &pm2);
-    SocketCanPort pm3("can0");
-    CiA402Device m3 (3, &pm3);
 
-     thread th (funcion1,&m1); thread th2 (funcion2,&m2); thread th3 (funcion3,&m3);
-     m1.Reset();
+//    SocketCanPort pm2("can0");
+//    CiA402Device m2 (2, &pm2);
+//    SocketCanPort pm3("can0");
+//    CiA402Device m3 (3, &pm3);
+
+//     thread th (funcion1,&m1); thread th2 (funcion2,&m2); thread th3 (funcion3,&m3);
+
+    m1.Reset();
 //     m2.Reset();
 //     m3.Reset();
      m1.SwitchOn();
 //     m2.SwitchOn();
 //     m3.SwitchOn();
      cout<<"Estado motor 1:\n"<<endl;
-     m1.PrintStatus();
+     //m1.PrintStatus();
+     uint32_t pos_ideal_m1=360;
+
+     //m1.Setup_Velocity_Mode(0,360);
+     uint32_t margen_error=5;
+     double pv = 0;
+     double u=0;
+
+//     while (margen_error<(pos_ideal_m1-pv)<-margen_error) {
+
+//        u= pid.OutputUpdate(pos_ideal_m1-pv);
+//        m1.SetVelocity((uint32_t)u);
+//        pv=m1.GetPosition();
+
+//     }
+
+
+m1.SetupPositionMode(360,360);
+//m1.SetPosition(pos_ideal_m1);
+sleep(1);
+pv=m1.GetPosition();
+while(pv != pos_ideal_m1){
+    //m1.SetupPositionMode(360,360);
+    pv=m1.GetPosition();
+    cout<<"POS"<<pv<<endl;
+    u=pid.OutputUpdate(pos_ideal_m1-pv);
+    cout<<"UUUUUUUUUU"<<u<<endl;
+    m1.Setup_Velocity_Mode(u,360);
+
+}
+
+
+//while (pos_ideal_m1-pv>0) {
+
+//    u= pid.OutputUpdate(pos_ideal_m1-pv);
+//    m1.SetVelocity((uint32_t)u);
+//    pv=m1.GetPosition();
+
+//}
+////m1.SetPosition(pos_ideal_m1);
+
+////sleep(2);
+////m1.PrintStatus();
+//sleep(1+pos_ideal_m1/360);
+
+////sleep(3);
+
+cout<<"Getposition"<<pv<<endl;
+//m1.SetVelocity(15);
+
+//cout<<m1.GetVelocity();
+
+
+
+
+
+
+
 //     cout<<"Estado motor 2:\n"<<endl;
 //     m2.PrintStatus();
 //     cout<<"Estado motor 3:\n"<<endl;
@@ -91,5 +152,6 @@ int main()
      sleep(1);
 
     return 0;
+
 }
 
