@@ -6,10 +6,14 @@
 #include <thread>
 #include "PIDBlock.h"
 #include "mainlib.h"
+#include <fstream>
 
 
 using namespace std;
-PIDBlock pid (2,0,0,0.01);
+PIDBlock pid (10,10,0,0.01);
+PIDBlock pid1 (5,0,1,0.01);
+
+ofstream fout ("test.txt", std::ofstream::out);
 
 //void funcion1(CiA402Device * ob){
 //    ob->Reset();
@@ -46,19 +50,20 @@ int main()
 //     thread th (funcion1,&m1); thread th2 (funcion2,&m2); thread th3 (funcion3,&m3);
 
     m1.Reset();
-//     m2.Reset();
-//     m3.Reset();
-     m1.SwitchOn();
-//     m2.SwitchOn();
-//     m3.SwitchOn();
-     cout<<"Estado motor 1:\n"<<endl;
-     //m1.PrintStatus();
-     uint32_t pos_ideal_m1=360;
+////     m2.Reset();
+////     m3.Reset();
+    m1.SwitchOn();
+////     m2.SwitchOn();
+////     m3.SwitchOn();
+//     cout<<"Estado motor 1:\n"<<endl;
+//     //m1.PrintStatus();
+     int pos_ideal_m1=-180;
+      double velocity_ideal_m1=0;
 
-     //m1.Setup_Velocity_Mode(0,360);
-     uint32_t margen_error=5;
-     double pv = 0;
-     double u=0;
+//     //m1.Setup_Velocity_Mode(0,360);
+////     uint32_t margen_error=5;
+//     double pv = 0;
+//     double u=0;
 
 //     while (margen_error<(pos_ideal_m1-pv)<-margen_error) {
 
@@ -68,39 +73,74 @@ int main()
 
 //     }
 
-
-m1.SetupPositionMode(360,360);
-//m1.SetPosition(pos_ideal_m1);
-sleep(1);
-pv=m1.GetPosition();
-while(pv != pos_ideal_m1){
-    //m1.SetupPositionMode(360,360);
-    pv=m1.GetPosition();
-    cout<<"POS"<<pv<<endl;
-    u=pid.OutputUpdate(pos_ideal_m1-pv);
-    cout<<"UUUUUUUUUU"<<u<<endl;
-    m1.Setup_Velocity_Mode(u,360);
-
-}
-
-
-//while (pos_ideal_m1-pv>0) {
-
-//    u= pid.OutputUpdate(pos_ideal_m1-pv);
-//    m1.SetVelocity((uint32_t)u);
+//CONTROL
+//m1.SetupPositionMode(360,360);
+//m1.SetPosition(pos_ideal  double x=t-(int)t;
+//      cout<<x<<endl;
+//    const vector<uint8_t> data={0x00,0x00,0xFF,0x01};
+//   //   long decimal=t-(int)t;
+//      cout<<"------------"<<t<<endl;_m1);
+//sleep(1);
+//pv=m1.GetPosition();
+//while(pv != pos_ideal_m1){
+//    //m1.SetupPositionMode(360,360);
 //    pv=m1.GetPosition();
+//    cout<<"POS"<<pv<<endl;
+//    u=pid.OutputUpdate(pos_ideal_m1-pv);
+//    cout<<"UUUUUUUUUU"<<u<<endl;
+//    m1.Setup_Velocity_Mode(u,360);
+
+
+////     //Control TORQUE
+//     m1.Setup_Torque_Mode();
+
+//     double u=0;
+
+//    // while(-0.1>pv-velocity_ideal_m1 || pv-velocity_ideal_m1>0.1)//
+
+//         while(pv!=velocity_ideal_m1)
+//     {
+//         pv=m1.GetVelocity();
+//         fout<<pv<<" , ";
+//         u=pid.OutputUpdate(velocity_ideal_m1-pv);
+//         fout<<u<<endl;
+//         m1.SetTorque(u);
+//         //  cout<<"UUUUUUUUUUUUU"<<u<<endl;
+//         //usleep(1000);
+
+//     }
+
+//     m1.SetupPositionMode(360,360);
+//     m1.SetPosition(pos_ideal_m1);
+//     sleep(1);
+    // m1.GetPosition();
+     //m1.SetTorque(00);
+
+//double up=0;
+//double uv=0;
+
+//while(pv != pos_ideal_m1){
+
+//    m1.SetupPositionMode(360,360);
+//    m1.SetPosition(pos_ideal_m1);
+//    up =pid.OutputUpdate(pos_ideal_m1-pv);
+
+//    uv =pid1.OutputUpdate(up-m1.GetVelocity());
+//    m1.Setup_Torque_Mode();
+//    m1.SetTorque(uv);
+
 
 //}
-////m1.SetPosition(pos_ideal_m1);
+
 
 ////sleep(2);
 ////m1.PrintStatus();
 //sleep(1+pos_ideal_m1/360);
 
 ////sleep(3);
-
-cout<<"Getposition"<<pv<<endl;
-//m1.SetVelocity(15);
+m1.Setup_Velocity_Mode(0,360);
+//cout<<"Getposition"<<pv<<endl;
+m1.SetVelocity(velocity_ideal_m1);
 
 //cout<<m1.GetVelocity();
 
@@ -126,7 +166,7 @@ cout<<"Getposition"<<pv<<endl;
 
 //     m1.PrintStatus();
 
-//     sleep(1+posdegree_m1/360);
+//     sleep(1+posdegree_m1/360150);
 //     int posicion_correcta=-1;
 //     while(posicion_correcta<0)
 //     double pos_real_m1 = m1.GetPosition();
@@ -135,7 +175,7 @@ cout<<"Getposition"<<pv<<endl;
 //     double error_m1 = pos_real_m1-pos_ideal_m1;
 
 //     if(error_m1<0)  //No ha llegado a la posición deseada
-//     {
+//     {controlword
 //         m1.Setup_Velocity_Mode(720,360);
 //     }
 //     else {

@@ -29,8 +29,6 @@ main ()
     posan3=(0.1-lengths[2])*180/(0.01*M_PI);
     cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
 
-
-
     m1.Reset();
     m2.Reset();
     m3.Reset();
@@ -38,8 +36,6 @@ main ()
     m1.SwitchOn();
     m2.SwitchOn();
     m3.SwitchOn();
-
-
 
     m1.SetupPositionMode(360,360);
     m2.SetupPositionMode(360,360);
