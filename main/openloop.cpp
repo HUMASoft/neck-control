@@ -19,7 +19,7 @@ main ()
     TableKinematics a;
     vector<double> lengths(3);
     long orient=1;
-    long incli=1;
+    long incli=10;
 
     a.GetIK(incli,orient,lengths);
     cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
