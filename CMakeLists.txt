@@ -24,6 +24,9 @@ target_link_libraries( position-control mainlib )
 add_executable(openloop main/openloop.cpp)
 target_link_libraries( openloop mainlib )
 
+add_executable(feedback main/feedback.cpp)
+target_link_libraries( feedback mainlib )
+
 
 
 

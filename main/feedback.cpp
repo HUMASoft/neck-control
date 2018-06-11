@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include "Cia402device.h"
 #include "CiA301CommPort.h"
@@ -5,13 +6,43 @@
 #include "mainlib.h"
 #include "math.h"
 
+#include "fcontrol.h"
+
 
 
 
 main ()
 {
+    //Controllers
 
-    fstream graph("graph.txt",ios::trunc);
+    //pi
+    vector<double> npi ={1};
+    vector<double> dpi ={1};
+
+    //pd
+    vector<double> npd ={1};
+    vector<double> dpd ={1};
+
+//    //fpi
+//    vector<double> npi ={};
+//    vector<double> dpi ={};
+
+//    //fpd
+//    vector<double> npd ={};
+//    vector<double> dpd ={};
+
+
+    SystemBlock pi1(npi,dpi);
+    SystemBlock pd1(npd,dpd);
+
+    SystemBlock pi2(npi,dpi);
+    SystemBlock pd2(npd,dpd);
+
+    SystemBlock pi3(npi,dpi);
+    SystemBlock pd3(npd,dpd);
+
+
+    fstream graph("./graph.csv",ios::trunc);
     SocketCanPort pm1("can0");
     CiA402Device m1 (1, &pm1);
     SocketCanPort pm2("can0");
@@ -41,9 +72,17 @@ main ()
     m2.SwitchOn();
     m3.SwitchOn();
 
-    m1.SetupPositionMode(360,360);
-    m2.SetupPositionMode(360,360);
-    m3.SetupPositionMode(360,360);
+//    m1.SetupPositionMode(360,360);
+//    m2.SetupPositionMode(360,360);
+//    m3.SetupPositionMode(360,360);
+    m1.Setup_Torque_Mode();
+    m2.Setup_Torque_Mode();
+    m3.Setup_Torque_Mode();
+
+
+    double interval=3;
+    double dts=0.01;
+
 
     for (int i=0;i<11;i++)
     {
@@ -60,16 +99,28 @@ main ()
 
         graph << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3 << endl;
 
-        m1.SetPosition(posan1);
-        m2.SetPosition(posan2);
-        m3.SetPosition(posan3);
-        sleep(2);
+        for (double t=0;t<interval; t+=dts){
+             m1.SetTorque(pd1.OutputUpdate(pi1.OutputUpdate(posan1-m1.GetPosition())-m1.GetVelocity()));
+             m2.SetTorque(pd2.OutputUpdate(pi2.OutputUpdate(posan2-m2.GetPosition())-m2.GetVelocity()));
+             m3.SetTorque(pd3.OutputUpdate(pi3.OutputUpdate(posan3-m3.GetPosition())-m3.GetVelocity()));
+             usleep(dts*1000000);
+             graph << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+
+        }
+        m1.SetTorque(0);
+
 
     }
 
+    graph.close();
+
+    m1.SetupPositionMode(360,360);
+    m2.SetupPositionMode(360,360);
+    m3.SetupPositionMode(360,360);
     m1.SetPosition(0);
     m2.SetPosition(0);
     m3.SetPosition(0);
+    sleep(2);
 
      cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
 
