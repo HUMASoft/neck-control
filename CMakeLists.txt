@@ -27,7 +27,8 @@ target_link_libraries( openloop mainlib )
 add_executable(feedback main/feedback.cpp)
 target_link_libraries( feedback mainlib )
 
-
+add_executable(test main/test.cpp)
+target_link_libraries( test mainlib )
 
 
 

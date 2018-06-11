@@ -15,21 +15,21 @@ main ()
 {
     //Controllers
 
-    //pi
-    vector<double> npi ={1};
-    vector<double> dpi ={1};
+//    //pi
+//    vector<double> npi ={1};
+//    vector<double> dpi ={1};
 
-    //pd
-    vector<double> npd ={1};
-    vector<double> dpd ={1};
+//    //pd
+//    vector<double> npd ={1};
+//    vector<double> dpd ={1};
 
-//    //fpi
-//    vector<double> npi ={};
-//    vector<double> dpi ={};
+    //fpi
+    vector<double> npi ={-0.0404, 0.3582, -0.0891, -1.0214, 0.7977};
+    vector<double> dpi ={-0.1076, 0.4977, 0.1886, -1.5784, 1.0000};
 
-//    //fpd
-//    vector<double> npd ={};
-//    vector<double> dpd ={};
+    //fpd
+    vector<double> npd ={-4.7853, 43.4275, -6.6602, -138.0768, 108.2231};
+    vector<double> dpd ={0.0653, -0.2690, -0.8054, 0.5132, 1.0000};
 
 
     SystemBlock pi1(npi,dpi);
@@ -99,15 +99,16 @@ main ()
 
         graph << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3 << endl;
 
-        for (double t=0;t<interval; t+=dts){
-             m1.SetTorque(pd1.OutputUpdate(pi1.OutputUpdate(posan1-m1.GetPosition())-m1.GetVelocity()));
-             m2.SetTorque(pd2.OutputUpdate(pi2.OutputUpdate(posan2-m2.GetPosition())-m2.GetVelocity()));
-             m3.SetTorque(pd3.OutputUpdate(pi3.OutputUpdate(posan3-m3.GetPosition())-m3.GetVelocity()));
-             usleep(dts*1000000);
-             graph << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+        for (double t=0;t<interval; t+=dts)
+        {
+            m1.SetTorque(pd1.OutputUpdate(pi1.OutputUpdate(posan1-m1.GetPosition())-m1.GetVelocity()));
+            m2.SetTorque(pd2.OutputUpdate(pi2.OutputUpdate(posan2-m2.GetPosition())-m2.GetVelocity()));
+            m3.SetTorque(pd3.OutputUpdate(pi3.OutputUpdate(posan3-m3.GetPosition())-m3.GetVelocity()));
+            usleep(dts*1000000);
+            graph << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
         }
-        m1.SetTorque(0);
+//        m1.SetTorque(0);
 
 
     }
