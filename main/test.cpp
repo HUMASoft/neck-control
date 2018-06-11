@@ -84,15 +84,15 @@ main ()
     double interval=3;
     double dts=0.01;
 
-
+double f=300;
 
     for (double t=0;t<interval; t+=dts)
     {
-        m1.SetTorque(400);
-        m2.SetTorque(400);
-        m3.SetTorque(400);
+        m1.SetTorque(f);
+        m2.SetTorque(f);
+        m3.SetTorque(f);
         usleep(dts*1000000);
-        graph << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+        cout << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
     }
 
