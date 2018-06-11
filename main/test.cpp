@@ -81,16 +81,16 @@ main ()
     m3.Setup_Torque_Mode();
 
 
-    double interval=3;
+    double interval=2;
     double dts=0.01;
 
-double f=300;
+double f=150;
 
     for (double t=0;t<interval; t+=dts)
     {
-        m1.SetTorque(f);
-        m2.SetTorque(f);
-        m3.SetTorque(f);
+        m1.SetTorque(250);
+        m2.SetTorque(0);
+        m3.SetTorque(0);
         usleep(dts*1000000);
         cout << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
