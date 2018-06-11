@@ -54,8 +54,8 @@ main ()
 
     TableKinematics a;
     vector<double> lengths(3);
-    long orient=20;
-    long incli=20;
+    long orient=60;
+    long incli=10;
 
     a.GetIK(incli,orient,lengths);
     cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
@@ -63,19 +63,22 @@ main ()
     posan1=(0.1-lengths[0])*180/(0.01*M_PI);
     posan2=(0.1-lengths[1])*180/(0.01*M_PI);
     posan3=(0.1-lengths[2])*180/(0.01*M_PI);
-    cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
+    cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3 <<endl;
 
     m1.Reset();
     m2.Reset();
     m3.Reset();
 
     m1.SwitchOn();
+    sleep(1);
     m2.SwitchOn();
+    sleep(1);
     m3.SwitchOn();
+    sleep(1);
 
-//    m1.SetupPositionMode(360,360);
-//    m2.SetupPositionMode(360,360);
-//    m3.SetupPositionMode(360,360);
+    m1.SetupPositionMode(360,360);
+    m2.SetupPositionMode(360,360);
+    m3.SetupPositionMode(360,360);
     m1.Setup_Torque_Mode();
     m2.Setup_Torque_Mode();
     m3.Setup_Torque_Mode();
@@ -88,9 +91,10 @@ double f=150;
 
     for (double t=0;t<interval; t+=dts)
     {
-        m1.SetTorque(250);
-        m2.SetTorque(0);
-        m3.SetTorque(0);
+        m1.SetTorque(pd1.OutputUpdate(pi1.OutputUpdate(posan1-m1.GetPosition())-m1.GetVelocity()));
+        m2.SetTorque(pd2.OutputUpdate(pi2.OutputUpdate(posan2-m2.GetPosition())-m2.GetVelocity()));
+        m3.SetTorque(pd3.OutputUpdate(pi3.OutputUpdate(posan1-m3.GetPosition())-m3.GetVelocity()));
+
         usleep(dts*1000000);
         cout << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
