@@ -10,7 +10,10 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/lib/)
 INCLUDE_DIRECTORIES(${SUBDIR_INCLUDE_DIRECTORIES})
 
 add_executable(main main/main.cpp)
-target_link_libraries( main CiA402Device fcontrol )
+target_link_libraries( main CiA402Device fcontrol mainlib)
+
+add_executable(closeloop main/closeloop.cpp)
+target_link_libraries( closeloop CiA402Device fcontrol mainlib)
 
 add_executable(kinematics main/kinematics.cpp)
 target_link_libraries( kinematics mainlib )
@@ -21,8 +24,9 @@ target_link_libraries( position-control mainlib )
 add_executable(openloop main/openloop.cpp)
 target_link_libraries( openloop mainlib )
 
-add_executable(controller-test main/controller-test.cpp)
-target_link_libraries( controller-test mainlib )
+
+
+
 
 
 

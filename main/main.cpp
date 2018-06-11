@@ -7,6 +7,9 @@
 #include "PIDBlock.h"
 #include "mainlib.h"
 #include <fstream>
+#include "fcontrol.h"
+#include "Kinematics.h"
+
 
 
 using namespace std;
@@ -15,18 +18,24 @@ using namespace std;
 
 ofstream fout ("test.txt", std::ofstream::out);
 
-void funcion1(CiA402Device * ob){
+void funcion1(CiA402Device * ob, long pos_ideal){
     double dtse=0.01;
-    PIDBlock pid (0.25,0.1,0.001,dtse);
-    PIDBlock pid1 (14.5,10,0,dtse);
+//    PIDBlock pidi (1.956,58.38,0,dtse);  //PI 1
+//    PIDBlock pide (10.61,0,0.08305,dtse);  //PD 1
+    PIDBlock pidi (5.742,35.75,0,dtse);  //PI 1
+    PIDBlock pide (7.934,0,0.265,dtse);  //PD 1
+    SystemBlock con(vector<double>{   -0.0404  ,  0.3582  , -0.0891  , -1.0214  ,  0.7977},
+                              vector<double>{ -0.1076 ,   0.4977 ,   0.1886  , -1.5784  ,  1.0000},
+   0.78689 );
+    //con.SetSaturation(-800,800);
     ob->Reset();
     ob->SwitchOn();
     //cout<<"Estado motor 1:\n"<<endl;
     //ob->PrintStatus();
     ob->Setup_Torque_Mode();
-   int pos_ideal_m1=360;
-   for (int i=0;i<3000;i++){
-        ob->SetTorque(pid1.OutputUpdate(pid.OutputUpdate(pos_ideal_m1-ob->GetPosition())-ob->GetVelocity()));
+   int pos_ideal_m1=pos_ideal;
+   for (int i=0;i<400;i++){
+        ob->SetTorque(pidi.OutputUpdate(pide.OutputUpdate(pos_ideal_m1-ob->GetPosition())-ob->GetVelocity()));
         usleep(dtse*1000000);
    }
    ob->SetTorque(0);
@@ -34,36 +43,49 @@ void funcion1(CiA402Device * ob){
 
 }
 
-void funcion2(CiA402Device * ob){
+void funcion2(CiA402Device * ob, long pos_ideal){
     double dtse=0.01;
-    PIDBlock pid (0.25,0.1,0.001,dtse);
-    PIDBlock pid1 (14.5,10,0,dtse);
+   PIDBlock pidi (0.0694,8.7,0,dtse);  //PI 2
+   PIDBlock pide (8.662,0,0.2506,dtse);  //PD 2
+    SystemBlock con(vector<double>{   -0.0404  ,  0.3582  , -0.0891  , -1.0214  ,  0.7977},
+                              vector<double>{ -0.1076 ,   0.4977 ,   0.1886  , -1.5784  ,  1.0000},
+   0.78689 );
+    //con.SetSaturation(-800,800);
     ob->Reset();
     ob->SwitchOn();
     //cout<<"Estado motor 1:\n"<<endl;
     //ob->PrintStatus();
     ob->Setup_Torque_Mode();
-   int pos_ideal_m1=180;
-   for (int i=0;i<3000;i++){
-        ob->SetTorque(pid1.OutputUpdate(pid.OutputUpdate(pos_ideal_m1-ob->GetPosition())-ob->GetVelocity()));
+   int pos_ideal_m1=pos_ideal;
+   for (int i=0;i<400;i++){
+        ob->SetTorque(pidi.OutputUpdate(pide.OutputUpdate(pos_ideal_m1-ob->GetPosition())-ob->GetVelocity()));
         usleep(dtse*1000000);
    }
    ob->SetTorque(0);
    cout<<"MOTOR_2 "<<ob->GetPosition()<<endl;
 }
-void funcion3(CiA402Device * ob){
+void funcion3(CiA402Device * ob,long pos_ideal){
     double dtse=0.01;
-    PIDBlock pid (0.25,0.1,0.001,dtse);
-    PIDBlock pid1 (14.5,10,0,dtse);
-    ob->Reset();
-    ob->SwitchOn();
-    //cout<<"Estado motor 1:\n"<<endl;
-    //ob->PrintStatus();
-    ob->Setup_Torque_Mode();
-   int pos_ideal_m1=720;
-   for (int i=0;i<3000;i++){
-        ob->SetTorque(pid1.OutputUpdate(pid.OutputUpdate(pos_ideal_m1-ob->GetPosition())-ob->GetVelocity()));
+    double s3;
+//    PIDBlock pidi (3.956,247.8,0,dtse);  //PI 3
+//    PIDBlock pide (21.61,0,0.008305,dtse);  //PD 3
+        PIDBlock pidi (0.6284,41.65,0,dtse);  //PI 3
+        PIDBlock pide (8.631,0,0.246,dtse);  //PD 3
+        SystemBlock con(vector<double>{   -0.0404  ,  0.3582  , -0.0891  , -1.0214  ,  0.7977},
+                                  vector<double>{ -0.1076 ,   0.4977 ,   0.1886  , -1.5784  ,  1.0000},
+       0.78689 );
+        //con.SetSaturation(-800,800);
+        ob->Reset();
+        ob->SwitchOn();
+        //cout<<"Estado motor 1:\n"<<endl;
+        //ob->PrintStatus();
+        ob->Setup_Torque_Mode();
+       int pos_ideal_m1=pos_ideal;
+       for (int i=0;i<400;i++){
+            ob->SetTorque(pidi.OutputUpdate(pide.OutputUpdate(pos_ideal_m1-ob->GetPosition())-ob->GetVelocity()));
+        ob->SetTorque(s3);
         usleep(dtse*1000000);
+        cout<<"s3: " << s3 <<endl;
    }
    ob->SetTorque(0);
    cout<<"MOTOR_3 "<<ob->GetPosition()<<endl;
@@ -79,14 +101,36 @@ int main()
     SocketCanPort pm2("can0");
     CiA402Device m2 (2, &pm2);
     SocketCanPort pm3("can0");
-    CiA402Device m3 (3, &pm3);
 
-     thread th (funcion1,&m1);
-     thread th2 (funcion2,&m2);
-     thread th3 (funcion3,&m3);
+    CiA402Device m3 (3, &pm3);
+    TableKinematics a;
+    vector<double> lengths(3);
+    long orient=1;
+    long incli=1;
+
+    a.GetIK(incli,orient,lengths);
+    cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
+    double posan1, posan2, posan3;
+    posan1=(0.1-lengths[0])*180/(0.01*M_PI);
+    posan2=(0.1-lengths[1])*180/(0.01*M_PI);
+    posan3=(0.1-lengths[2])*180/(0.01*M_PI);
+    cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
+
+     thread th (funcion1,&m1,posan1);
+     thread th2 (funcion2,&m2,posan2);
+     thread th3 (funcion3,&m3,posan3);
      th3.join();
      th2.join();
      th.join();
+     cout<<"MOTOR_1 "<<m1.GetPosition()<<" pos1 "<<posan1<<endl;
+     cout<<"MOTOR_2 "<<m2.GetPosition()<<" pos2 "<<posan2<<endl;
+     cout<<"MOTOR_3 "<<m3.GetPosition()<<" pos3 "<<posan3<<endl;
+
+
+
+
+     return 0;
+}
 
 
 //    m1.Reset();
@@ -276,7 +320,5 @@ int main()
 ////     cout <<y<<endl;
 //      sleep(1);
 
-    return 0;
 
-}
 

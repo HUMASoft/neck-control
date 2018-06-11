@@ -1,4 +1,4 @@
-#include <iostream>
+#include <iostream>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 #include <iostream>
 #include "Cia402device.h"
 #include "CiA301CommPort.h"
 #include "SocketCanPort.h"
@@ -19,7 +19,7 @@ main ()
     TableKinematics a;
     vector<double> lengths(3);
     long orient=1;
-    long incli=10;
+    long incli=25;
 
     a.GetIK(incli,orient,lengths);
     cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
@@ -40,9 +40,30 @@ main ()
     m1.SetupPositionMode(360,360);
     m2.SetupPositionMode(360,360);
     m3.SetupPositionMode(360,360);
-    m1.SetPosition(posan1);
-    m2.SetPosition(posan2);
-    m3.SetPosition(posan3);
+
+    for (int i=0;i<11;i++)
+    {
+
+        orient += 30;
+
+        a.GetIK(incli,orient,lengths);
+        cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
+        double posan1, posan2, posan3;
+        posan1=(0.1-lengths[0])*180/(0.01*M_PI);
+        posan2=(0.1-lengths[1])*180/(0.01*M_PI);
+        posan3=(0.1-lengths[2])*180/(0.01*M_PI);
+        cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
+
+        m1.SetPosition(posan1);
+        m2.SetPosition(posan2);
+        m3.SetPosition(posan3);
+        sleep(2);
+
+    }
+
+    m1.SetPosition(0);
+    m2.SetPosition(0);
+    m3.SetPosition(0);
 
      cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
 
