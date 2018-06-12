@@ -16,21 +16,21 @@ main ()
 {
     //Controllers
 
-    //pi
-    vector<double> npi ={1};
-    vector<double> dpi ={1};
+//    //pi
+//    vector<double> npi ={1};
+//    vector<double> dpi ={1};
 
-    //pd
-    vector<double> npd ={1};
-    vector<double> dpd ={1};
+//    //pd
+//    vector<double> npd ={1};
+//    vector<double> dpd ={1};
 
-//    //fpi
-//    vector<double> npi ={-0.0404, 0.3582, -0.0891, -1.0214, 0.7977};
-//    vector<double> dpi ={-0.1076, 0.4977, 0.1886, -1.5784, 1.0000};
+    //fpi
+    vector<double> npi ={-0.0404, 0.3582, -0.0891, -1.0214, 0.7977};
+    vector<double> dpi ={-0.1076, 0.4977, 0.1886, -1.5784, 1.0000};
 
-//    //fpd
-//    vector<double> npd ={-4.7853, 43.4275, -6.6602, -138.0768, 108.2231};
-//    vector<double> dpd ={0.0653, -0.2690, -0.8054, 0.5132, 1.0000};
+    //fpd
+    vector<double> npd ={-4.7853, 43.4275, -6.6602, -138.0768, 108.2231};
+    vector<double> dpd ={0.0653, -0.2690, -0.8054, 0.5132, 1.0000};
 
 
     SystemBlock pi1(npi,dpi);
@@ -84,7 +84,7 @@ main ()
     m3.Setup_Torque_Mode();
 
 
-    double interval=2;
+    double interval=5;
     double dts=0.01;
 
 double f=150;
