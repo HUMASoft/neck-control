@@ -24,7 +24,7 @@ main ()
     m1.SetupPositionMode(360,360);
     m2.SetupPositionMode(360,360);
     m3.SetupPositionMode(360,360);
-    m1.SetPosition(0);
+    m1.SetPosition(100);
     m2.SetPosition(0);
     m3.SetPosition(0);
 
