@@ -17,8 +17,14 @@ main ()
     //Controllers
     double dts=0.01;
 
-        PIDBlock pi (3.956,247.8,0,dts);
-        PIDBlock pd (70.58,0,1.875,dts);
+//        PIDBlock pi1 (3.956,247.8,0,dts);
+//        PIDBlock pd1 (70.58,0,1.875,dts);
+
+//        PIDBlock pi2 (3.956,247.8,0,dts);
+//        PIDBlock pd2 (70.58,0,1.875,dts);
+
+//        PIDBlock pi3 (3.956,247.8,0,dts);
+//        PIDBlock pd3 (70.58,0,1.875,dts);
 
 //    //pi
 //    vector<double> npi ={1};
@@ -38,13 +44,13 @@ main ()
 
 
     SystemBlock pi1(npi,dpi,10);
-    SystemBlock pd1(npd,dpd);
+    SystemBlock pd1(npd,dpd,20);
 
     SystemBlock pi2(npi,dpi,10);
-    SystemBlock pd2(npd,dpd);
+    SystemBlock pd2(npd,dpd,20);
 
-    SystemBlock pi3(npi,dpi,10);
-    SystemBlock pd3(npd,dpd);
+    SystemBlock pi3(npi,dpi,20);
+    SystemBlock pd3(npd,dpd,20);
 
 
     fstream graph("./graph.csv",ios::trunc);
@@ -58,8 +64,8 @@ main ()
 
     TableKinematics a;
     vector<double> lengths(3);
-    long orient=140;
-    long incli=20;
+    long orient=1;
+    long incli=30;
 
     a.GetIK(incli,orient,lengths);
     cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
@@ -93,10 +99,10 @@ main ()
     double ep2,ev2;
     double ep3,ev3;
 
-    double interval=5;
+    double interval=2;
     pd1.SetSaturation(-20,20);
     pd2.SetSaturation(-20,20);
-    pd3.SetSaturation(-20,20);
+    pd3.SetSaturation(-40,40);
 
 
 double f=150;
@@ -114,13 +120,13 @@ double f=150;
         ep3=posan3-m3.GetPosition();
         ev3= (ep3 > pd3)-m3.GetVelocity();
         m3.SetTorque(ev3 > pi3);
-//        m2.SetTorque(pd2.OutputUpdate(pi2.OutputUpdate(posan2-m2.GetPosition())-m2.GetVelocity()));
-//        m3.SetTorque(pd3.OutputUpdate(pi3.OutputUpdate(posan1-m3.GetPosition())-m3.GetVelocity()));
+
 
 //        m1.SetTorque(200);
         usleep(dts*1000*1000);
-//        cout << t << " , GetPosition: " << m1.GetPosition() << " ,GetVelocity:  " << m1.GetVelocity() << endl;
+        cout << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
         cout << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+
 
     }
     cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3 <<endl;
