@@ -85,7 +85,7 @@ void funcion3(CiA402Device * ob, double * position){
     {
         ep1=*position-ob->GetPosition();
         ev1= (ep1 > pd1)-ob->GetVelocity();
-        ob->SetTorque(ev1 > pi1);
+        ob->SetTorque(2*(ev1 > pi1));
         usleep(dts*1000*1000);
         //cout << " pos3 " << ob->GetPosition() << " , " << *position    <<endl;
     }

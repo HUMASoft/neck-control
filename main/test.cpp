@@ -43,17 +43,17 @@ main ()
     vector<double> dpd ={0.0653, -0.2690, -0.8054, 0.5132, 1.0000};
 
 
-    SystemBlock pi1(npi,dpi,10);
-    SystemBlock pd1(npd,dpd,20);
+    SystemBlock pi1(npi,dpi,5);
+    SystemBlock pd1(npd,dpd,10);
 
-    SystemBlock pi2(npi,dpi,10);
-    SystemBlock pd2(npd,dpd,20);
+    SystemBlock pi2(npi,dpi,5);
+    SystemBlock pd2(npd,dpd,10);
 
-    SystemBlock pi3(npi,dpi,20);
-    SystemBlock pd3(npd,dpd,20);
+    SystemBlock pi3(npi,dpi,10);
+    SystemBlock pd3(npd,dpd,10);
 
 
-    fstream graph("./graph.csv",ios::trunc);
+    ofstream graph("graph.csv",std::ofstream::out);
     SocketCanPort pm1("can0");
     CiA402Device m1 (1, &pm1);
     SocketCanPort pm2("can0");
@@ -65,7 +65,7 @@ main ()
     TableKinematics a;
     vector<double> lengths(3);
     long orient=1;
-    long incli=30;
+    long incli=1;
 
     a.GetIK(incli,orient,lengths);
     cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
@@ -99,13 +99,34 @@ main ()
     double ep2,ev2;
     double ep3,ev3;
 
-    double interval=2;
+    double interval=3;
     pd1.SetSaturation(-20,20);
     pd2.SetSaturation(-20,20);
-    pd3.SetSaturation(-40,40);
+    pd3.SetSaturation(-20,20);
 
 
 double f=150;
+
+incli=20;
+
+
+for (int i=0;i<11;i++)
+{
+
+    orient += 30;
+
+    a.GetIK(incli,orient,lengths);
+
+    cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
+    cout << "incli " << incli  << ", orient " << orient << endl;
+
+    graph << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
+    cout << "incli " << incli  << ", orient " << orient << endl;
+
+
+    posan1=(0.1-lengths[0])*180/(0.01*M_PI);
+    posan2=(0.1-lengths[1])*180/(0.01*M_PI);
+    posan3=(0.1-lengths[2])*180/(0.01*M_PI);
 
     for (double t=0;t<interval; t+=dts)
     {
@@ -119,19 +140,20 @@ double f=150;
 
         ep3=posan3-m3.GetPosition();
         ev3= (ep3 > pd3)-m3.GetVelocity();
-        m3.SetTorque(ev3 > pi3);
+        m3.SetTorque(2.1*(ev3 > pi3));
 
 
 //        m1.SetTorque(200);
         usleep(dts*1000*1000);
         cout << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
         cout << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
-
+        graph << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
+        graph << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
     }
-    cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3 <<endl;
+//    cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3 <<endl;
 
-
+}
     m1.SetTorque(0);
     m2.SetTorque(0);
     m3.SetTorque(0);
