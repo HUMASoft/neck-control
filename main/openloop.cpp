@@ -11,7 +11,7 @@
 main ()
 {
 
-    fstream graph("graph.txt",ios::trunc);
+    ofstream graph("graph.csv",std::ofstream::out);
     SocketCanPort pm1("can0");
     CiA402Device m1 (1, &pm1);
     SocketCanPort pm2("can0");
@@ -63,7 +63,19 @@ main ()
         m1.SetPosition(posan1);
         m2.SetPosition(posan2);
         m3.SetPosition(posan3);
-        sleep(2);
+
+
+        //sleep(2);
+        double dts=0.01;
+        for (double t=0;t<2; t+=dts)
+        {
+            usleep(dts*1000*1000);
+            cout << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
+            cout << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+            graph << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
+            graph << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+
+        }
 
     }
 
