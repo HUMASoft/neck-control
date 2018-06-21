@@ -12,8 +12,8 @@ INCLUDE_DIRECTORIES(${SUBDIR_INCLUDE_DIRECTORIES})
 add_executable(main main/main.cpp)
 target_link_libraries( main CiA402Device fcontrol mainlib)
 
-add_executable(closeloop main/closeloop.cpp)
-target_link_libraries( closeloop CiA402Device fcontrol mainlib)
+#add_executable(closeloop main/closeloop.cpp)
+#target_link_libraries( closeloop CiA402Device fcontrol mainlib)
 
 add_executable(kinematics main/kinematics.cpp)
 target_link_libraries( kinematics mainlib )

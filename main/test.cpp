@@ -17,14 +17,18 @@ main ()
     //Controllers
     double dts=0.01;
 
-//        PIDBlock pi1 (4.35,132.49,0,dts);
 //        PIDBlock pd1 (12.8,0,0.597,dts);
 
-//        PIDBlock pi2 (4.35,132.49,0,dts);
-//        PIDBlock pd2 (12.8,0,0.597,dts);
+    //pi: w=5 rad/s, phm=70 deg
+    //pd: w=5 rad/s, phm=70 deg
+//        PIDBlock pi1 (0.1278262,5.5535135,0,dts);
+//        PIDBlock pd1 (5.5535135,0,0.1278262,dts);
 
-//        PIDBlock pi3 (4.35,132.49,0,dts);
-//        PIDBlock pd3 (12.8,0,0.597,dts);
+//        PIDBlock pi2 (0.1278262,5.5535135,0,dts);
+//        PIDBlock pd2 (5.5535135,0,0.1278262,dts);
+
+//        PIDBlock pi3 (0.1278262,5.5535135,0,dts);
+//        PIDBlock pd3 (5.5535135,0,0.1278262,dts);
 
 
     //pi //tustin=(2/dts)*(z-1)/(z+1)
