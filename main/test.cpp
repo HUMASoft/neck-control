@@ -17,15 +17,14 @@ main ()
     //Controllers
     double dts=0.01;
 
-//        PIDBlock pi1 (3.956,247.8,0,dts);
-//        PIDBlock pd1 (70.58,0,1.875,dts);
+        PIDBlock pi1 (1,0,0,dts);
+        PIDBlock pd1 (1,0,0,dts);
 
-//        PIDBlock pi2 (3.956,247.8,0,dts);
-//        PIDBlock pd2 (70.58,0,1.875,dts);
+        PIDBlock pi2 (1,10,0,dts);
+        PIDBlock pd2 (10,0,1,dts);
 
-//        PIDBlock pi3 (3.956,247.8,0,dts);
-//        PIDBlock pd3 (70.58,0,1.875,dts);
-
+        PIDBlock pi3 (1,10,0,dts);
+        PIDBlock pd3 (10,0,1,dts);
 //    //pi
 //    vector<double> npi ={1};
 //    vector<double> dpi ={1};
@@ -43,14 +42,14 @@ main ()
     vector<double> dpd ={0.0653, -0.2690, -0.8054, 0.5132, 1.0000};
 
 
-    SystemBlock pi1(npi,dpi,5);
-    SystemBlock pd1(npd,dpd,10);
+//    SystemBlock pi1(npi,dpi,5);
+//    SystemBlock pd1(npd,dpd,10);
 
-    SystemBlock pi2(npi,dpi,5);
-    SystemBlock pd2(npd,dpd,10);
+//    SystemBlock pi2(npi,dpi,5);
+//    SystemBlock pd2(npd,dpd,10);
 
-    SystemBlock pi3(npi,dpi,10);
-    SystemBlock pd3(npd,dpd,10);
+//    SystemBlock pi3(npi,dpi,10);
+//    SystemBlock pd3(npd,dpd,10);
 
 
     ofstream graph("graph.csv",std::ofstream::out);
