@@ -17,14 +17,14 @@ main ()
     //Controllers
     double dts=0.01;
 
-        PIDBlock pi1 (1,0,0,dts);
-        PIDBlock pd1 (1,0,0,dts);
+        PIDBlock pi1 (4.35,132.49,0,dts);
+        PIDBlock pd1 (12.8,0,0.597,dts);
 
-        PIDBlock pi2 (1,10,0,dts);
-        PIDBlock pd2 (10,0,1,dts);
+        PIDBlock pi2 (4.35,132.49,0,dts);
+        PIDBlock pd2 (12.8,0,0.597,dts);
 
-        PIDBlock pi3 (1,10,0,dts);
-        PIDBlock pd3 (10,0,1,dts);
+        PIDBlock pi3 (4.35,132.49,0,dts);
+        PIDBlock pd3 (12.8,0,0.597,dts);
 //    //pi
 //    vector<double> npi ={1};
 //    vector<double> dpi ={1};
