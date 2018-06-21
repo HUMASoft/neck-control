@@ -35,8 +35,6 @@ main ()
 //        4.35 z + 128.1
 //         --------------
 //             z - 1
-    vector<double> npi ={128.1,4.35};
-    vector<double> dpi ={-1,1};
 
 //    //pd
 
@@ -44,35 +42,38 @@ main ()
 //    ---------------
 //         z + 1
 
-    vector<double> npd ={11.61,13.99};
-    vector<double> dpd ={1,1};
+//    vector<double> npi ={128.1,4.35};
+//    vector<double> dpi ={-1,1};
 
-        SystemBlock pi1(npi,dpi,dts/2);
-        SystemBlock pd1(npd,dpd,2/dts);
+//    vector<double> npd ={11.61,13.99};
+//    vector<double> dpd ={1,1};
 
-        SystemBlock pi2(npi,dpi,dts/25);
-        SystemBlock pd2(npd,dpd,2/dts);
+//        SystemBlock pi1(npi,dpi,dts/2);
+//        SystemBlock pd1(npd,dpd,2/dts);
 
-        SystemBlock pi3(npi,dpi,dts/2);
-        SystemBlock pd3(npd,dpd,2/dts);
+//        SystemBlock pi2(npi,dpi,dts/25);
+//        SystemBlock pd2(npd,dpd,2/dts);
 
-//    //fpi
-//    vector<double> npi ={-0.0404, 0.3582, -0.0891, -1.0214, 0.7977};
-//    vector<double> dpi ={-0.1076, 0.4977, 0.1886, -1.5784, 1.0000};
+//        SystemBlock pi3(npi,dpi,dts/2);
+//        SystemBlock pd3(npd,dpd,2/dts);
 
-//    //fpd
-//    vector<double> npd ={-4.7853, 43.4275, -6.6602, -138.0768, 108.2231};
-//    vector<double> dpd ={0.0653, -0.2690, -0.8054, 0.5132, 1.0000};
+    //fpi
+    vector<double> npi ={-0.0404, 0.3582, -0.0891, -1.0214, 0.7977};
+    vector<double> dpi ={-0.1076, 0.4977, 0.1886, -1.5784, 1.0000};
+
+    //fpd
+    vector<double> npd ={-4.7853, 43.4275, -6.6602, -138.0768, 108.2231};
+    vector<double> dpd ={0.0653, -0.2690, -0.8054, 0.5132, 1.0000};
 
 
-//    SystemBlock pi1(npi,dpi,5);
-//    SystemBlock pd1(npd,dpd,10);
+    SystemBlock pi1(npi,dpi,10);
+    SystemBlock pd1(npd,dpd,10);
 
-//    SystemBlock pi2(npi,dpi,5);
-//    SystemBlock pd2(npd,dpd,10);
+    SystemBlock pi2(npi,dpi,10);
+    SystemBlock pd2(npd,dpd,10);
 
-//    SystemBlock pi3(npi,dpi,10);
-//    SystemBlock pd3(npd,dpd,10);
+    SystemBlock pi3(npi,dpi,10);
+    SystemBlock pd3(npd,dpd,10);
 
 
     ofstream graph("graph.csv",std::ofstream::out);
