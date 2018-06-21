@@ -17,29 +17,48 @@ main ()
     //Controllers
     double dts=0.01;
 
-        PIDBlock pi1 (4.35,132.49,0,dts);
-        PIDBlock pd1 (12.8,0,0.597,dts);
+//        PIDBlock pi1 (4.35,132.49,0,dts);
+//        PIDBlock pd1 (12.8,0,0.597,dts);
 
-        PIDBlock pi2 (4.35,132.49,0,dts);
-        PIDBlock pd2 (12.8,0,0.597,dts);
+//        PIDBlock pi2 (4.35,132.49,0,dts);
+//        PIDBlock pd2 (12.8,0,0.597,dts);
 
-        PIDBlock pi3 (4.35,132.49,0,dts);
-        PIDBlock pd3 (12.8,0,0.597,dts);
-//    //pi
-//    vector<double> npi ={1};
-//    vector<double> dpi ={1};
+//        PIDBlock pi3 (4.35,132.49,0,dts);
+//        PIDBlock pd3 (12.8,0,0.597,dts);
+
+
+    //pi //tustin=(2/dts)*(z-1)/(z+1)
+//        4.35 z + 128.1
+//         --------------
+//             z - 1
+    vector<double> npi ={128.1,4.35};
+    vector<double> dpi ={-1,1};
 
 //    //pd
-//    vector<double> npd ={1};
-//    vector<double> dpd ={1};
 
-    //fpi
-    vector<double> npi ={-0.0404, 0.3582, -0.0891, -1.0214, 0.7977};
-    vector<double> dpi ={-0.1076, 0.4977, 0.1886, -1.5784, 1.0000};
+//    13.99 z + 11.61
+//    ---------------
+//         z + 1
 
-    //fpd
-    vector<double> npd ={-4.7853, 43.4275, -6.6602, -138.0768, 108.2231};
-    vector<double> dpd ={0.0653, -0.2690, -0.8054, 0.5132, 1.0000};
+    vector<double> npd ={11.61,13.99};
+    vector<double> dpd ={1,1};
+
+        SystemBlock pi1(npi,dpi,dts/2);
+        SystemBlock pd1(npd,dpd,2/dts);
+
+        SystemBlock pi2(npi,dpi,dts/25);
+        SystemBlock pd2(npd,dpd,2/dts);
+
+        SystemBlock pi3(npi,dpi,dts/2);
+        SystemBlock pd3(npd,dpd,2/dts);
+
+//    //fpi
+//    vector<double> npi ={-0.0404, 0.3582, -0.0891, -1.0214, 0.7977};
+//    vector<double> dpi ={-0.1076, 0.4977, 0.1886, -1.5784, 1.0000};
+
+//    //fpd
+//    vector<double> npd ={-4.7853, 43.4275, -6.6602, -138.0768, 108.2231};
+//    vector<double> dpd ={0.0653, -0.2690, -0.8054, 0.5132, 1.0000};
 
 
 //    SystemBlock pi1(npi,dpi,5);
