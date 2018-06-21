@@ -57,23 +57,35 @@ main ()
 //        SystemBlock pi3(npi,dpi,dts/2);
 //        SystemBlock pd3(npd,dpd,2/dts);
 
+//    //fpi wrong??
+//    vector<double> npi ={-0.0404, 0.3582, -0.0891, -1.0214, 0.7977};
+//    vector<double> dpi ={-0.1076, 0.4977, 0.1886, -1.5784, 1.0000};
+
+//    //fpd
+//    vector<double> npd ={-4.7853, 43.4275, -6.6602, -138.0768, 108.2231};
+//    vector<double> dpd ={0.0653, -0.2690, -0.8054, 0.5132, 1.0000};
+
+
+
     //fpi
-    vector<double> npi ={-0.0404, 0.3582, -0.0891, -1.0214, 0.7977};
-    vector<double> dpi ={-0.1076, 0.4977, 0.1886, -1.5784, 1.0000};
+    vector<double> npi ={-0.3913  ,  1.0335  ,  1.6085  , -5.0480  ,  2.8015};
+    vector<double> dpi ={ -0.1539  ,  0.3766  ,  0.6573 ,  -1.8799  ,  1.0000};
 
     //fpd
+    //fpd w=5 maybe that one:
+//    dn =-5.4872   49.4863   -6.7768 -157.0124  121.7188
+//    dd = 0.0653   -0.2690   -0.8054    0.5132    1.0000
     vector<double> npd ={-4.7853, 43.4275, -6.6602, -138.0768, 108.2231};
     vector<double> dpd ={0.0653, -0.2690, -0.8054, 0.5132, 1.0000};
 
+    SystemBlock pi1(npi,dpi,1);
+    SystemBlock pd1(npd,dpd,1);
 
-    SystemBlock pi1(npi,dpi,10);
-    SystemBlock pd1(npd,dpd,10);
+    SystemBlock pi2(npi,dpi,1);
+    SystemBlock pd2(npd,dpd,1);
 
-    SystemBlock pi2(npi,dpi,10);
-    SystemBlock pd2(npd,dpd,10);
-
-    SystemBlock pi3(npi,dpi,10);
-    SystemBlock pd3(npd,dpd,10);
+    SystemBlock pi3(npi,dpi,1);
+    SystemBlock pd3(npd,dpd,1);
 
 
     ofstream graph("graph.csv",std::ofstream::out);
