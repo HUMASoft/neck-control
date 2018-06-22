@@ -21,32 +21,24 @@ main ()
 
     //pi: w=5 rad/s, phm=70 deg
     //pd: w=5 rad/s, phm=70 deg
-        PIDBlock pi1 (0.1278262,5.5535135,0,dts);
-        PIDBlock pd1 (5.5535135,0,0.1278262,dts);
+    double pi[3]={ 0.1278262 , 5.5535135 , 0 };
+    double pd[3]={ 5.5535135 , 0 , 0.1278262 };
 
-        PIDBlock pi2 (0.1278262,5.5535135,0,dts);
-        PIDBlock pd2 (5.5535135,0,0.1278262,dts);
+//    //pi: w=25 rad/s, phm=70 deg
+//    //pd: w=25 rad/s, phm=70 deg
+//    double pi[3]={ 2.0072114 , 44.868574 , 0 };
+//    double pd[3]={ 44.868574 , 0 , 2.0072114 };
 
-        PIDBlock pi3 (0.1278262,5.5535135,0,dts);
-        PIDBlock pd3 (5.5535135,0,0.1278262,dts);
+        PIDBlock pi1 (pi[0],pi[1],pi[2],dts);
+        PIDBlock pd1 (pd[0],pd[1],pd[2],dts);
+
+        PIDBlock pi2 (pi[0],pi[1],pi[2],dts);
+        PIDBlock pd2 (pd[0],pd[1],pd[2],dts);
+
+        PIDBlock pi3 (pi[0],pi[1],pi[2],dts);
+        PIDBlock pd3 (pd[0],pd[1],pd[2],dts);
 
 
-    //pi //tustin=(2/dts)*(z-1)/(z+1)
-//        4.35 z + 128.1
-//         --------------
-//             z - 1
-
-//    //pd
-
-//    13.99 z + 11.61
-//    ---------------
-//         z + 1
-
-//    vector<double> npi ={128.1,4.35};
-//    vector<double> dpi ={-1,1};
-
-//    vector<double> npd ={11.61,13.99};
-//    vector<double> dpd ={1,1};
 
 //        SystemBlock pi1(npi,dpi,dts/2);
 //        SystemBlock pd1(npd,dpd,2/dts);
@@ -57,28 +49,28 @@ main ()
 //        SystemBlock pi3(npi,dpi,dts/2);
 //        SystemBlock pd3(npd,dpd,2/dts);
 
-//    //fpi wrong??
-//    vector<double> npi ={-0.0404, 0.3582, -0.0891, -1.0214, 0.7977};
-//    vector<double> dpi ={-0.1076, 0.4977, 0.1886, -1.5784, 1.0000};
 
-//    //fpd
-//    vector<double> npd ={-4.7853, 43.4275, -6.6602, -138.0768, 108.2231};
-//    vector<double> dpd ={0.0653, -0.2690, -0.8054, 0.5132, 1.0000};
-
-
-
-//    //fpi
+//    //fpi w=5
 //    vector<double> npi ={-0.3913  ,  1.0335  ,  1.6085  , -5.0480  ,  2.8015};
 //    vector<double> dpi ={ -0.1539  ,  0.3766  ,  0.6573 ,  -1.8799  ,  1.0000};
 
 //    //fpd
-//    //fpd w=5 maybe that one:
-////    dn =-5.4872   49.4863   -6.7768 -157.0124  121.7188
-////    dd = 0.0653   -0.2690   -0.8054    0.5132    1.0000
+//    //fpd w=5
 //    vector<double> npd ={-5.4872  , 49.4863 ,  -6.7768, -157.0124 , 121.7188};
 //    vector<double> dpd ={0.0653  , -0.2690,   -0.8054 ,   0.5132 ,   1.0000};
-////    vector<double> npd ={-4.7853, 43.4275, -6.6602, -138.0768, 108.2231};
-////    vector<double> dpd ={0.0653, -0.2690, -0.8054, 0.5132, 1.0000};
+
+//    //fpd w=25 pm=70
+//    vector<double> npi ={26.1251, -119.3468, -293.8182,  178.9746 , 361.7371};
+//    vector<double> dpi ={-0.1440 ,  -0.1031 ,   1.1445  ,  2.1032  ,  1.0000};
+
+//    //fpi w=25 pm=70
+//    vector<double> npi ={0.3354  ,  0.3724  , -1.8968 ,  -0.5654  ,  1.9306};
+//    vector<double> dpi ={0.2381  ,  0.3986  , -1.0645  , -0.5716  ,  1.0000};
+
+//    //fpd w=5
+//    vector<double> npd ={-5.4872  , 49.4863 ,  -6.7768, -157.0124 , 121.7188};
+//    vector<double> dpd ={0.0653  , -0.2690,   -0.8054 ,   0.5132 ,   1.0000};
+
 
 //    SystemBlock pi1(npi,dpi,1);
 //    SystemBlock pd1(npd,dpd,1);
