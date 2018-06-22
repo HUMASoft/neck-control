@@ -19,35 +19,36 @@ main ()
 
 //        PIDBlock pd1 (12.8,0,0.597,dts);
 
-    //pi: w=5 rad/s, phm=70 deg
-    //pd: w=5 rad/s, phm=70 deg
-    double pi[3]={ 0.1278262 , 5.5535135 , 0 };
-    double pd[3]={ 5.5535135 , 0 , 0.1278262 };
+//    //pi: w=5 rad/s, phm=70 deg
+//    //pd: w=5 rad/s, phm=70 deg
+//    double pi[3]={ 0.1278262 , 5.5535135 , 0 };
+//    double pd[3]={ 5.5535135 , 0 , 0.1278262 };
 
-//    //pi: w=25 rad/s, phm=70 deg
-//    //pd: w=25 rad/s, phm=70 deg
-//    double pi[3]={ 2.0072114 , 44.868574 , 0 };
-//    double pd[3]={ 44.868574 , 0 , 2.0072114 };
+////    //not ok!!!
+////    //pi: w=25 rad/s, phm=70 deg
+////    //pd: w=25 rad/s, phm=70 deg
+////    double pi[3]={ 2.0072114 , 44.868574 , 0 };
+////    double pd[3]={ 44.868574 , 0 , 2.0072114 };
 
-        PIDBlock pi1 (pi[0],pi[1],pi[2],dts);
-        PIDBlock pd1 (pd[0],pd[1],pd[2],dts);
+//        PIDBlock pi1 (pi[0],pi[1],pi[2],dts);
+//        PIDBlock pd1 (pd[0],pd[1],pd[2],dts);
 
-        PIDBlock pi2 (pi[0],pi[1],pi[2],dts);
-        PIDBlock pd2 (pd[0],pd[1],pd[2],dts);
+//        PIDBlock pi2 (pi[0],pi[1],pi[2],dts);
+//        PIDBlock pd2 (pd[0],pd[1],pd[2],dts);
 
-        PIDBlock pi3 (pi[0],pi[1],pi[2],dts);
-        PIDBlock pd3 (pd[0],pd[1],pd[2],dts);
+//        PIDBlock pi3 (pi[0],pi[1],pi[2],dts);
+//        PIDBlock pd3 (pd[0],pd[1],pd[2],dts);
 
 
 
-//        SystemBlock pi1(npi,dpi,dts/2);
-//        SystemBlock pd1(npd,dpd,2/dts);
+////        SystemBlock pi1(npi,dpi,dts/2);
+////        SystemBlock pd1(npd,dpd,2/dts);
 
-//        SystemBlock pi2(npi,dpi,dts/25);
-//        SystemBlock pd2(npd,dpd,2/dts);
+////        SystemBlock pi2(npi,dpi,dts/25);
+////        SystemBlock pd2(npd,dpd,2/dts);
 
-//        SystemBlock pi3(npi,dpi,dts/2);
-//        SystemBlock pd3(npd,dpd,2/dts);
+////        SystemBlock pi3(npi,dpi,dts/2);
+////        SystemBlock pd3(npd,dpd,2/dts);
 
 
 //    //fpi w=5
@@ -59,27 +60,27 @@ main ()
 //    vector<double> npd ={-5.4872  , 49.4863 ,  -6.7768, -157.0124 , 121.7188};
 //    vector<double> dpd ={0.0653  , -0.2690,   -0.8054 ,   0.5132 ,   1.0000};
 
-//    //fpd w=25 pm=70
-//    vector<double> npi ={26.1251, -119.3468, -293.8182,  178.9746 , 361.7371};
-//    vector<double> dpi ={-0.1440 ,  -0.1031 ,   1.1445  ,  2.1032  ,  1.0000};
+    //fpd w=25 pm=70
+    vector<double> npd ={26.1251, -119.3468, -293.8182,  178.9746 , 361.7371};
+    vector<double> dpd ={-0.1440 ,  -0.1031 ,   1.1445  ,  2.1032  ,  1.0000};
 
-//    //fpi w=25 pm=70
-//    vector<double> npi ={0.3354  ,  0.3724  , -1.8968 ,  -0.5654  ,  1.9306};
-//    vector<double> dpi ={0.2381  ,  0.3986  , -1.0645  , -0.5716  ,  1.0000};
+    //fpi w=25 pm=70
+    vector<double> npi ={0.3354  ,  0.3724  , -1.8968 ,  -0.5654  ,  1.9306};
+    vector<double> dpi ={0.2381  ,  0.3986  , -1.0645  , -0.5716  ,  1.0000};
 
 //    //fpd w=5
 //    vector<double> npd ={-5.4872  , 49.4863 ,  -6.7768, -157.0124 , 121.7188};
 //    vector<double> dpd ={0.0653  , -0.2690,   -0.8054 ,   0.5132 ,   1.0000};
 
 
-//    SystemBlock pi1(npi,dpi,1);
-//    SystemBlock pd1(npd,dpd,1);
+    SystemBlock pi1(npi,dpi,1);
+    SystemBlock pd1(npd,dpd,1);
 
-//    SystemBlock pi2(npi,dpi,1);
-//    SystemBlock pd2(npd,dpd,1);
+    SystemBlock pi2(npi,dpi,1);
+    SystemBlock pd2(npd,dpd,1);
 
-//    SystemBlock pi3(npi,dpi,1);
-//    SystemBlock pd3(npd,dpd,1);
+    SystemBlock pi3(npi,dpi,1);
+    SystemBlock pd3(npd,dpd,1);
 
 
     ofstream graph("graph.csv",std::ofstream::out);
