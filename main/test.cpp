@@ -21,14 +21,14 @@ main ()
 
     //pi: w=5 rad/s, phm=70 deg
     //pd: w=5 rad/s, phm=70 deg
-//        PIDBlock pi1 (0.1278262,5.5535135,0,dts);
-//        PIDBlock pd1 (5.5535135,0,0.1278262,dts);
+        PIDBlock pi1 (0.1278262,5.5535135,0,dts);
+        PIDBlock pd1 (5.5535135,0,0.1278262,dts);
 
-//        PIDBlock pi2 (0.1278262,5.5535135,0,dts);
-//        PIDBlock pd2 (5.5535135,0,0.1278262,dts);
+        PIDBlock pi2 (0.1278262,5.5535135,0,dts);
+        PIDBlock pd2 (5.5535135,0,0.1278262,dts);
 
-//        PIDBlock pi3 (0.1278262,5.5535135,0,dts);
-//        PIDBlock pd3 (5.5535135,0,0.1278262,dts);
+        PIDBlock pi3 (0.1278262,5.5535135,0,dts);
+        PIDBlock pd3 (5.5535135,0,0.1278262,dts);
 
 
     //pi //tustin=(2/dts)*(z-1)/(z+1)
@@ -67,25 +67,27 @@ main ()
 
 
 
-    //fpi
-    vector<double> npi ={-0.3913  ,  1.0335  ,  1.6085  , -5.0480  ,  2.8015};
-    vector<double> dpi ={ -0.1539  ,  0.3766  ,  0.6573 ,  -1.8799  ,  1.0000};
+//    //fpi
+//    vector<double> npi ={-0.3913  ,  1.0335  ,  1.6085  , -5.0480  ,  2.8015};
+//    vector<double> dpi ={ -0.1539  ,  0.3766  ,  0.6573 ,  -1.8799  ,  1.0000};
 
-    //fpd
-    //fpd w=5 maybe that one:
-//    dn =-5.4872   49.4863   -6.7768 -157.0124  121.7188
-//    dd = 0.0653   -0.2690   -0.8054    0.5132    1.0000
-    vector<double> npd ={-4.7853, 43.4275, -6.6602, -138.0768, 108.2231};
-    vector<double> dpd ={0.0653, -0.2690, -0.8054, 0.5132, 1.0000};
+//    //fpd
+//    //fpd w=5 maybe that one:
+////    dn =-5.4872   49.4863   -6.7768 -157.0124  121.7188
+////    dd = 0.0653   -0.2690   -0.8054    0.5132    1.0000
+//    vector<double> npd ={-5.4872  , 49.4863 ,  -6.7768, -157.0124 , 121.7188};
+//    vector<double> dpd ={0.0653  , -0.2690,   -0.8054 ,   0.5132 ,   1.0000};
+////    vector<double> npd ={-4.7853, 43.4275, -6.6602, -138.0768, 108.2231};
+////    vector<double> dpd ={0.0653, -0.2690, -0.8054, 0.5132, 1.0000};
 
-    SystemBlock pi1(npi,dpi,1);
-    SystemBlock pd1(npd,dpd,1);
+//    SystemBlock pi1(npi,dpi,1);
+//    SystemBlock pd1(npd,dpd,1);
 
-    SystemBlock pi2(npi,dpi,1);
-    SystemBlock pd2(npd,dpd,1);
+//    SystemBlock pi2(npi,dpi,1);
+//    SystemBlock pd2(npd,dpd,1);
 
-    SystemBlock pi3(npi,dpi,1);
-    SystemBlock pd3(npd,dpd,1);
+//    SystemBlock pi3(npi,dpi,1);
+//    SystemBlock pd3(npd,dpd,1);
 
 
     ofstream graph("graph.csv",std::ofstream::out);
@@ -135,9 +137,10 @@ main ()
     double ep3,ev3;
 
     double interval=3;
-    pd1.SetSaturation(-20,20);
-    pd2.SetSaturation(-20,20);
-    pd3.SetSaturation(-20,20);
+
+    pd1.SetSaturation(-30,30);
+    pd2.SetSaturation(-30,30);
+    pd3.SetSaturation(-30,30);
 
 
 double f=150;
