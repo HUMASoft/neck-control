@@ -83,7 +83,9 @@ main ()
     SystemBlock pd3(npd,dpd,1);
 
 
-    ofstream graph("graph.csv",std::ofstream::out);
+    ofstream targets("targets.csv",std::ofstream::out);
+    ofstream responses("responses.csv",std::ofstream::out);
+
     SocketCanPort pm1("can0");
     CiA402Device m1 (1, &pm1);
     SocketCanPort pm2("can0");
@@ -151,7 +153,7 @@ for (int i=0;i<11;i++)
     cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
     cout << "incli " << incli  << ", orient " << orient << endl;
 
-    graph << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
+//    graph << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
     cout << "incli " << incli  << ", orient " << orient << endl;
 
 
@@ -178,8 +180,8 @@ for (int i=0;i<11;i++)
         usleep(dts*1000*1000);
         cout << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
         cout << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
-        graph << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
-        graph << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+        responses << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
+        targets << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
     }
 //    cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3 <<endl;
