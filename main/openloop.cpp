@@ -23,7 +23,7 @@ main ()
     TableKinematics a;
     vector<double> lengths(3);
     long orient=1;
-    long incli=25;
+    long incli=35;
 
     a.GetIK(incli,orient,lengths);
     cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
@@ -33,13 +33,13 @@ main ()
     posan3=(0.1-lengths[2])*180/(0.01*M_PI);
     cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
 
-//    m1.Reset();
-//    m2.Reset();
-//    m3.Reset();
+    m1.Reset();
+    m2.Reset();
+    m3.Reset();
 
-//    m1.SwitchOn();
-//    m2.SwitchOn();
-//    m3.SwitchOn();
+    m1.SwitchOn();
+    m2.SwitchOn();
+    m3.SwitchOn();
 
     m1.SetupPositionMode(360,360);
     m2.SetupPositionMode(360,360);
