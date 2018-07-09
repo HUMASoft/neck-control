@@ -53,16 +53,16 @@ void funcion2(CiA402Device * ob, long pos_ideal){
     //con.SetSaturation(-800,800);
     ob->Reset();
     ob->SwitchOn();
-    //cout<<"Estado motor 1:\n"<<endl;
-    //ob->PrintStatus();
-    ob->Setup_Torque_Mode();
-   int pos_ideal_m1=pos_ideal;
-   for (int i=0;i<400;i++){
-        ob->SetTorque(pidi.OutputUpdate(pide.OutputUpdate(pos_ideal_m1-ob->GetPosition())-ob->GetVelocity()));
-        usleep(dtse*1000000);
-   }
-   ob->SetTorque(0);
-   cout<<"MOTOR_2 "<<ob->GetPosition()<<endl;
+//    //cout<<"Estado motor 1:\n"<<endl;
+//    //ob->PrintStatus();
+//    ob->Setup_Torque_Mode();
+//   int pos_ideal_m1=pos_ideal;
+//   for (int i=0;i<400;i++){
+//        ob->SetTorque(pidi.OutputUpdate(pide.OutputUpdate(pos_ideal_m1-ob->GetPosition())-ob->GetVelocity()));
+//        usleep(dtse*1000000);
+//   }
+//   ob->SetTorque(0);
+//   cout<<"MOTOR_2 "<<ob->GetPosition()<<endl;
 }
 void funcion3(CiA402Device * ob,long pos_ideal){
     double dtse=0.01;
@@ -95,6 +95,7 @@ void funcion3(CiA402Device * ob,long pos_ideal){
 
 int main()
 {
+    ofstream graph11("graph11.csv",std::ofstream::out);
     SocketCanPort pm1("can0");
     CiA402Device m1 (1, &pm1);
 
@@ -105,27 +106,48 @@ int main()
     CiA402Device m3 (3, &pm3);
     TableKinematics a;
     vector<double> lengths(3);
-    long orient=1;
-    long incli=1;
+//    long orient=180;
+//    long incli=20;
 
-    a.GetIK(incli,orient,lengths);
-    cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
-    double posan1, posan2, posan3;
-    posan1=(0.1-lengths[0])*180/(0.01*M_PI);
-    posan2=(0.1-lengths[1])*180/(0.01*M_PI);
-    posan3=(0.1-lengths[2])*180/(0.01*M_PI);
-    cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
+//    a.GetIK(incli,orient,lengths);
+//    cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
+//    double posan1, posan2, posan3;
+//    posan1=(0.1-lengths[0])*180/(0.01*M_PI);
+//    posan2=(0.1-lengths[1])*180/(0.01*M_PI);
+//    posan3=(0.1-lengths[2])*180/(0.01*M_PI);
+//    cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
 
-     thread th (funcion1,&m1,posan1);
-     thread th2 (funcion2,&m2,posan2);
-     thread th3 (funcion3,&m3,posan3);
-     th3.join();
-     th2.join();
-     th.join();
-     cout<<"MOTOR_1 "<<m1.GetPosition()<<" pos1 "<<posan1<<endl;
-     cout<<"MOTOR_2 "<<m2.GetPosition()<<" pos2 "<<posan2<<endl;
-     cout<<"MOTOR_3 "<<m3.GetPosition()<<" pos3 "<<posan3<<endl;
+//     thread th (funcion1,&m1,posan1);
+//     thread th2 (funcion2,&m2,posan2);
+//     thread th3 (funcion3,&m3,posan3);
+//     th3.join();
+//     th2.join();
+//     th.join();
+//     cout<<"MOTOR_1 "<<m1.GetPosition()<<" pos1 "<<posan1<<endl;
+//     cout<<"MOTOR_2 "<<m2.GetPosition()<<" pos2 "<<posan2<<endl;
+//     cout<<"MOTOR_3 "<<m3.GetPosition()<<" pos3 "<<posan3<<endl;
+    double dtse=0.01;
+    PIDBlock pide (0.25,0.18,0,dtse);
+    PIDBlock pidi (10.5,10,0,dtse);
 
+
+
+    m1.Reset();
+    m1.SwitchOn();
+    //cout<<"Estado motor 1:\n"<<endl;
+    //ob->PrintStatus();
+    m1.Setup_Torque_Mode();
+    double u=0,posan1=180;
+   int pos_ideal_m1=posan1;
+   for (double t=0;t<15; t+=dtse){
+        m1.SetTorque(pidi.OutputUpdate(pide.OutputUpdate(pos_ideal_m1-m1.GetPosition())-m1.GetVelocity()));
+        u= pidi.OutputUpdate(pide.OutputUpdate(pos_ideal_m1-m1.GetPosition())-m1.GetVelocity());
+        graph11 << t  << "," << posan1  << "," << m1.GetPosition() << "," << posan1-m1.GetPosition() << "," << u<<endl;
+        usleep(dtse*1000000);
+   }
+   m1.SetTorque(0);
+   cout<<"MOTOR_1 "<<m1.GetPosition()<<endl;
+    //graph11 << "t" << t  <<<< "pos1 " << posan1  << ", posreal " << m1.GetPosition() << ", error " << posan1-m1.GetPosition() << ", U " << 0<<endl;
 
 
 

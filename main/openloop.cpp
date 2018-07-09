@@ -45,10 +45,10 @@ main ()
     m2.SetupPositionMode(360,360);
     m3.SetupPositionMode(360,360);
 
-    for (int i=0;i<11;i++)
+    for (int i=0;i<17;i++)
     {
 
-        orient += 30;
+        orient += 20;
 
         a.GetIK(incli,orient,lengths);
         cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
@@ -85,5 +85,8 @@ main ()
 
      cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
 
+    return 0;
 }
+
+
 
