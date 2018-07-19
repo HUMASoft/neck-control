@@ -107,16 +107,16 @@ main ()
     posan3=(0.1-lengths[2])*180/(0.01*M_PI);
     cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3 <<endl;
 
-    m1.Reset();
-    m2.Reset();
-    m3.Reset();
+//    m1.Reset();
+//    m2.Reset();
+//    m3.Reset();
 
-    m1.SwitchOn();
-    sleep(1);
-    m2.SwitchOn();
-    sleep(1);
-    m3.SwitchOn();
-    sleep(1);
+//    m1.SwitchOn();
+//    sleep(1);
+//    m2.SwitchOn();
+//    sleep(1);
+//    m3.SwitchOn();
+//    sleep(1);
 
 //    m1.SetupPositionMode(360,360);
 //    m2.SetupPositionMode(360,360);
@@ -131,7 +131,7 @@ main ()
     double ep2,ev2;
     double ep3,ev3;
 
-    double interval=3;
+    double interval=1;
 
     pd1.SetSaturation(-30,30);
     pd2.SetSaturation(-30,30);
