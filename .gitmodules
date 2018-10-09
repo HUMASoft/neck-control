@@ -4,3 +4,6 @@
 [submodule "lib/fcontrol"]
 	path = lib/fcontrol
 	url = https://github.com/munozyanez/fcontrol.git
+[submodule "lib/sensor-integration"]
+	path = lib/sensor-integration
+	url = https://github.com/HUMASoft/sensor-integration.git

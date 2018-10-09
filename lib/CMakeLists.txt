@@ -8,6 +8,8 @@ aux_source_directory(mainlib/ SRC_LIST)
 
 add_subdirectory(CiA402Device/)
 add_subdirectory(fcontrol/)
+add_subdirectory(sensor-integration/)
+
 
 set(SUBDIR_INCLUDE_DIRECTORIES ${SUBDIR_INCLUDE_DIRECTORIES}
     ${CMAKE_CURRENT_SOURCE_DIR}/mainlib
