@@ -4,7 +4,7 @@
 #include "SocketCanPort.h"
 
 
-main ()
+int main ()
 {
     SocketCanPort pm1("can1");
     CiA402Device m1 (1, &pm1);
@@ -27,5 +27,6 @@ main ()
     m1.SetPosition(50);
     m2.SetPosition(0);
     m3.SetPosition(0);
+    return 0;
 
 }

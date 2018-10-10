@@ -5,11 +5,14 @@
 #include "mainlib.h"
 #include "math.h"
 
+#include "SerialArduino.h"
 
 
 
 int main ()
 {
+
+    SerialArduino tilt;
 
     ofstream graph("graph.csv",std::ofstream::out);
     SocketCanPort pm1("can1");
@@ -20,10 +23,12 @@ int main ()
     CiA402Device m3 (3, &pm3);
 
 
-    TableKinematics a;
+    TableKinematics a("../neck-control/ik.csv");
     vector<double> lengths(3);
     long orient=1;
     long incli=35;
+
+    double incSensor,oriSensor;
 
     a.GetIK(incli,orient,lengths);
     cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
@@ -70,10 +75,14 @@ int main ()
         for (double t=0;t<1; t+=dts)
         {
             usleep(dts*1000*1000);
-            cout << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
-            cout << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
-            graph << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
-            graph << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+//            cout << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
+//            cout << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+//            graph << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
+//            graph << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+
+            tilt.ReadSensor(incSensor,oriSensor);
+            cout << t << " , incli: " << incli << " , orient: " << orient <<  endl;
+            graph << t << " , incli: " << incli << " , orient: " << orient <<  endl;
 
         }
 

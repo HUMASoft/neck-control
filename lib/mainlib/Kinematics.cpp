@@ -13,9 +13,17 @@ TableKinematics::TableKinematics()
     Initialize("ik.csv", vector<int>{40,360});
 }
 
+
+
+TableKinematics::TableKinematics(string path)
+{
+
+    Initialize(path, vector<int>{40,360});
+}
+
 long TableKinematics::GetIK(long theta, long phi, vector<double> & lengths)
 {
-//  cout << lookupIndex.size();
+    //  cout << lookupIndex.size();
     long index = lookupIndex[theta][phi];
     if (lengths.size()!=lookupTable[index].size())
     {

@@ -1,7 +1,8 @@
 #project(mainlib)
 cmake_minimum_required(VERSION 2.8)
 
-set(CMAKE_CXX_STANDARD 11)
+#set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 aux_source_directory(mainlib/ SRC_LIST)
@@ -17,7 +18,7 @@ set(SUBDIR_INCLUDE_DIRECTORIES ${SUBDIR_INCLUDE_DIRECTORIES}
 
 ADD_LIBRARY(mainlib SHARED ${SRC_LIST} )
 
-target_link_libraries( mainlib CiA402Device fcontrol )
+target_link_libraries( mainlib CiA402Device fcontrol SensorIntegration)
 
 
 

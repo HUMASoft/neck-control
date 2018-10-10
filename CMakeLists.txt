@@ -1,9 +1,18 @@
 project(neck-control)
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1.0)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -pthread" )
+
+if(UNIX AND NOT APPLE AND "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64")
+    # FIX: Qt was built with -reduce-relocations
+    add_definitions(-fPIC)
+endif()
+## FIX: Qt was built with -reduce-relocations
+#if (Qt5_POSITION_INDEPENDENT_CODE)
+#    SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
+#endif()
 
 #main library with local functions and interfaces to external libraries.
 add_subdirectory(${PROJECT_SOURCE_DIR}/lib/)
@@ -30,7 +39,6 @@ target_link_libraries( feedback mainlib )
 add_executable(test main/test.cpp)
 target_link_libraries( test mainlib )
 
-
-
-
+add_executable(closedloop main/closedloop.cpp)
+target_link_libraries( closedloop mainlib )
 

@@ -12,7 +12,7 @@
 
 
 
-main ()
+int main ()
 {
     //Controllers
     double dts=0.01;

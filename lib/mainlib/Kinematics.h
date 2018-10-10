@@ -25,6 +25,7 @@ class TableKinematics : public Kinematics
 {
 public:
     TableKinematics();
+    TableKinematics(string path);
     long GetIK(long theta, long phi, vector<double> &lengths);
 
 private:

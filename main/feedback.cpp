@@ -91,7 +91,7 @@ void funcion3(CiA402Device * ob, double * position){
     }
 }
 
-main ()
+int main ()
 {
 
 
@@ -209,6 +209,7 @@ th.detach();
 //    m3.SetPosition(0);
 //    sleep(2);
 
+return 0;
 
 }
 
