@@ -81,8 +81,8 @@ int main ()
 //            graph << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
             tilt.ReadSensor(incSensor,oriSensor);
-            cout << t << " , incli: " << incli << " , orient: " << orient <<  endl;
-            graph << t << " , incli: " << incli << " , orient: " << orient <<  endl;
+            cout << t << " , incli: " << incSensor << " , orient: " << oriSensor <<  endl;
+            graph << t << " , incli: " << incSensor << " , orient: " << oriSensor <<  endl;
 
         }
 
