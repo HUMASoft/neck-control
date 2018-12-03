@@ -20,10 +20,10 @@ int main ()
     CiA402Device m3 (3, &pm3);
 
 
-    TableKinematics a("../neck-control/ik.csv");
+    TableKinematics a("../neck-control/ik2.csv");
     vector<double> lengths(3);
     long orient=1;
-    long incli=15;
+    long incli=25;
 
     a.GetIK(incli,orient,lengths);
     cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
