@@ -20,10 +20,10 @@ int main ()
     CiA402Device m3 (3, &pm3);
 
 
-    TableKinematics a("../neck-control/ik2.csv");
+    TableKinematics a("../neck-control/ik.csv");
     vector<double> lengths(3);
     long orient=1;
-    long incli=25;
+    long incli=15;
 
     a.GetIK(incli,orient,lengths);
     cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
@@ -33,17 +33,18 @@ int main ()
     posan3=(0.1-lengths[2])*180/(0.01*M_PI);
     cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
 
-    m1.Reset();
-    m2.Reset();
-    m3.Reset();
+    //comment if motors already started
+//    m1.Reset();
+//    m2.Reset();
+//    m3.Reset();
 
-    m1.SwitchOn();
-    m2.SwitchOn();
-    m3.SwitchOn();
+//    m1.SwitchOn();
+//    m2.SwitchOn();
+//    m3.SwitchOn();
 
-    m1.SetupPositionMode(360,360);
-    m2.SetupPositionMode(360,360);
-    m3.SetupPositionMode(360,360);
+//    m1.SetupPositionMode(360,360);
+//    m2.SetupPositionMode(360,360);
+//    m3.SetupPositionMode(360,360);
 
     for (int i=0;i<17;i++)
     {

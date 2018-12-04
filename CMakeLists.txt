@@ -42,3 +42,9 @@ target_link_libraries( feedback mainlib )
 add_executable(closedloop main/closedloop.cpp)
 target_link_libraries( closedloop mainlib )
 
+add_executable(start main/start.cpp)
+target_link_libraries( start mainlib )
+
+
+add_executable(stop main/stop.cpp)
+target_link_libraries( stop mainlib )
