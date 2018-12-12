@@ -19,16 +19,16 @@ int main ()
     CiA402Device m3 (3, &pm3);
 
 
-    m1.Reset();
+        m1.Reset();
+        m1.SwitchOn();
+        m1.SetupPositionMode(360,360);
+
     m2.Reset();
-    m3.Reset();
-
-    m1.SwitchOn();
     m2.SwitchOn();
-    m3.SwitchOn();
-
-    m1.SetupPositionMode(360,360);
     m2.SetupPositionMode(360,360);
+
+    m3.Reset();
+    m3.SwitchOn();
     m3.SetupPositionMode(360,360);
 
 

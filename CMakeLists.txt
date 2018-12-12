@@ -48,3 +48,9 @@ target_link_libraries( start mainlib )
 
 add_executable(stop main/stop.cpp)
 target_link_libraries( stop mainlib )
+
+add_executable(demo1 main/demo1.cpp)
+target_link_libraries( demo1 mainlib )
+
+add_executable(sensortest main/sensortest.cpp)
+target_link_libraries( sensortest mainlib )
