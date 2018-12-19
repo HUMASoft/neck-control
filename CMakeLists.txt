@@ -54,3 +54,6 @@ target_link_libraries( demo1 mainlib )
 
 add_executable(sensortest main/sensortest.cpp)
 target_link_libraries( sensortest mainlib )
+
+add_executable(demo360 main/demo360.cpp)
+target_link_libraries( demo360 mainlib )
