@@ -82,8 +82,11 @@ int main ()
     double ep3,ev3,cs3;
     double posan1, posan2, posan3;
 
+    //sysid
+    OnlineSystemIdentification id;
+
     long stepsize=5;
-    for (int i=0;i<170/stepsize;i++)
+    for (int i=0;i<350/stepsize;i++)
     {
 
         orient += stepsize;
@@ -102,7 +105,7 @@ int main ()
 
 
         //MAIN CONTROL LOOP
-        double interval=0.2*stepsize; //in seconds
+        double interval=0.01*stepsize; //in seconds
         for (double t=0;t<interval; t+=dts)
         {
 
