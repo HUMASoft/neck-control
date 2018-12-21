@@ -59,16 +59,7 @@ int main ()
     CiA402Device m2 (2, &pm2);
     SocketCanPort pm3("can1");
     CiA402Device m3 (3, &pm3);
-    //Motor setup
-    m1.Reset();
-    m1.SwitchOn();
-    m1.Setup_Torque_Mode();
-    m2.Reset();
-    m2.SwitchOn();
-    m2.Setup_Torque_Mode();
-    m3.Reset();
-    m3.SwitchOn();
-    m3.Setup_Torque_Mode();
+
 
     //--Neck Kinematics--
     TableKinematics a("../neck-control/ik.csv");
@@ -82,11 +73,57 @@ int main ()
     double ep3,ev3,cs3;
     double posan1, posan2, posan3;
 
+    //Motor setup
+    m1.Reset();
+    m1.SwitchOn();
+    m2.Reset();
+    m2.SwitchOn();
+    m3.Reset();
+    m3.SwitchOn();
+
+    m3.SetupPositionMode(360,360);
+
+    m3.SetupPositionMode(360,360);
+
+    m3.SetupPositionMode(360,360);
+
+    a.GetIK(incli,orient,lengths);
+    cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
+    posan1=(0.1-lengths[0])*180/(0.01*M_PI);
+    posan2=(0.1-lengths[1])*180/(0.01*M_PI);
+    posan3=(0.1-lengths[2])*180/(0.01*M_PI);
+    cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
+
+//    graph << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3 << endl;
+
+    m1.SetPosition(posan1);
+    m2.SetPosition(posan2);
+    m3.SetPosition(posan3);
+
+
+    sleep(2);
+
+
+    //Motor setup
+    m1.Reset();
+    m1.SwitchOn();
+    m2.Reset();
+    m2.SwitchOn();
+    m3.Reset();
+    m3.SwitchOn();
+    m3.Setup_Torque_Mode();
+    m1.Setup_Torque_Mode();
+    m2.Setup_Torque_Mode();
+
+    sleep(2);
+
+
     //sysid
     OnlineSystemIdentification id;
 
-    long stepsize=5;
-    for (int i=0;i<350/stepsize;i++)
+    long stepsize=1;
+
+    for (int i=0; i<350/stepsize ;i++)
     {
 
         orient += stepsize;
@@ -96,7 +133,7 @@ int main ()
         posan1=(0.1-lengths[0])*180/(0.01*M_PI);
         posan2=(0.1-lengths[1])*180/(0.01*M_PI);
         posan3=(0.1-lengths[2])*180/(0.01*M_PI);
-        cout << "TARGET: , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+//        cout << "TARGET: , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
     //    double sats=40;
     //    pd1.SetSaturation(-sats,sats);
@@ -105,14 +142,17 @@ int main ()
 
 
         //MAIN CONTROL LOOP
-        double interval=0.01*stepsize; //in seconds
+        double interval=0.02*stepsize; //in seconds
         for (double t=0;t<interval; t+=dts)
         {
+
 
             ep1=posan1-m1.GetPosition();
             cs1=ep1 > pd1;
             ev1= cs1-m1.GetVelocity();
             m1.SetTorque((ev1 > pi1));
+            id.UpdateSystem(pd1.GetState(),m1.GetPosition());
+
 
             ep2=posan2-m2.GetPosition();
             cs2=ep2 > pd2;
@@ -137,7 +177,7 @@ int main ()
 
 
         }
-        cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
+//        cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
 
     }
     m1.SetTorque(0);
