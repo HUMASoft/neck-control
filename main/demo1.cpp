@@ -62,10 +62,9 @@ int main ()
 
 
     //--Neck Kinematics--
-    TableKinematics a("../neck-control/ik.csv");
+    TableKinematics a("../neck-control/arco1075.csv");
     vector<double> lengths(3);
-    long orient=1;
-    long incli=25;
+
 
     //vars
     double ep1,ev1,cs1;
@@ -76,82 +75,70 @@ int main ()
     //Motor setup
     m1.Reset();
     m1.SwitchOn();
+
     m2.Reset();
     m2.SwitchOn();
+
     m3.Reset();
     m3.SwitchOn();
 
-    m3.SetupPositionMode(360,360);
 
-    m3.SetupPositionMode(360,360);
-
-    m3.SetupPositionMode(360,360);
-
-    a.GetIK(incli,orient,lengths);
-    cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
-    posan1=(0.1-lengths[0])*180/(0.01*M_PI);
-    posan2=(0.1-lengths[1])*180/(0.01*M_PI);
-    posan3=(0.1-lengths[2])*180/(0.01*M_PI);
-    cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
-
-//    graph << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3 << endl;
-
-    m1.SetPosition(posan1);
-    m2.SetPosition(posan2);
-    m3.SetPosition(posan3);
+//    m1.SetupPositionMode(360,360);
+//    m2.SetupPositionMode(360,360);
+//    m3.SetupPositionMode(360,360);
 
 
-    sleep(2);
-
-
-    //Motor setup
-    m1.Reset();
-    m1.SwitchOn();
-    m2.Reset();
-    m2.SwitchOn();
-    m3.Reset();
-    m3.SwitchOn();
     m3.Setup_Torque_Mode();
     m1.Setup_Torque_Mode();
     m2.Setup_Torque_Mode();
 
-    sleep(2);
+    sleep(1);
+
 
 
     //sysid
-    OnlineSystemIdentification id;
+//    OnlineSystemIdentification id;
 
     long stepsize=1;
+    long orient=1;
+    long incli=20;
 
-    for (int i=0; i<350/stepsize ;i++)
+
+    for (int i=0; i<2000 ;i++)
     {
 
-        orient += stepsize;
+        orient = (orient+stepsize) % 359; //modulo 359;
+//        incli= (incli+stepsize/10) % 35; //modulo 359;
+//        if (incli==0) incli=1;
 
+
+        cout << "orient " << orient  << ", incli " << incli << endl;
         a.GetIK(incli,orient,lengths);
 //        cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
-        posan1=(0.1-lengths[0])*180/(0.01*M_PI);
-        posan2=(0.1-lengths[1])*180/(0.01*M_PI);
-        posan3=(0.1-lengths[2])*180/(0.01*M_PI);
-//        cout << "TARGET: , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+        posan1=(0.1095-lengths[0])*180/(0.01*M_PI);
+        posan2=(0.1095-lengths[1])*180/(0.01*M_PI);
+        posan3=(0.1095-lengths[2])*180/(0.01*M_PI);
+        cout << "TARGET: , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
     //    double sats=40;
     //    pd1.SetSaturation(-sats,sats);
     //    pd2.SetSaturation(-sats,sats);
     //    pd3.SetSaturation(-sats,sats);
 
-
+//        m1.SetPosition(posan1);
+//        m2.SetPosition(posan2);
+//        m3.SetPosition(posan3);
         //MAIN CONTROL LOOP
-        double interval=0.02*stepsize; //in seconds
-        for (double t=0;t<interval; t+=dts)
-        {
+//       double interval=0.1*stepsize; //in seconds
+//        for (double t=0;t<interval; t+=dts)
+//        {
 
 
             ep1=posan1-m1.GetPosition();
             cs1=ep1 > pd1;
             ev1= cs1-m1.GetVelocity();
             m1.SetTorque((ev1 > pi1));
-            id.UpdateSystem(pd1.GetState(),m1.GetPosition());
+//            id.UpdateSystem(pd1.GetState(),m1.GetPosition());
 
 
             ep2=posan2-m2.GetPosition();
@@ -164,22 +151,27 @@ int main ()
             ev3= cs3-m3.GetVelocity();
             m3.SetTorque((ev3 > pi3));
 
-            //  cout << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
-            controls << t << " , " << cs1 << " , " << cs2 <<  " , " << cs3 <<endl;
-            responses << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
+//              cout << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
+//            controls << t << " , " << cs1 << " , " << cs2 <<  " , " << cs3 <<endl;
+//            responses << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
 
-            //            cout << t << " , " << m1.GetVelocity() << " , " << m2.GetVelocity() <<  " , " << m3.GetVelocity() <<endl;
-            //            responses << t << " , " << m1.GetVelocity() << " , " << m2.GetVelocity() <<  " , " << m3.GetVelocity() <<endl;
+//            //            cout << t << " , " << m1.GetVelocity() << " , " << m2.GetVelocity() <<  " , " << m3.GetVelocity() <<endl;
+//            //            responses << t << " , " << m1.GetVelocity() << " , " << m2.GetVelocity() <<  " , " << m3.GetVelocity() <<endl;
 
-            usleep(dts*1000*1000);
-            // cout << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
-            targets << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+//            cout << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+//            targets << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+
+//            usleep(dts*1000*1000);
 
 
-        }
-//        cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
+//      r  }
+
+        cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
+
+        usleep(0.01*1000*1000);
 
     }
+
     m1.SetTorque(0);
     m2.SetTorque(0);
     m3.SetTorque(0);

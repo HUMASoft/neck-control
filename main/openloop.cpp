@@ -7,7 +7,17 @@
 
 
 
+//    m1.Reset();
+//    m2.Reset();
+//    m3.Reset();
 
+//    m1.SwitchOn();
+//    m2.SwitchOn();
+//    m3.SwitchOn();
+
+//    m1.SetupPositionMode(360,360);
+//    m2.SetupPositionMode(360,360);
+//    m3.SetupPositionMode(360,360);
 int main ()
 {
 
@@ -20,17 +30,18 @@ int main ()
     CiA402Device m3 (3, &pm3);
 
 
-    TableKinematics a("../neck-control/ik.csv");
+    TableKinematics a("../neck-control/arco1075.csv");
     vector<double> lengths(3);
     long orient=1;
-    long incli=39;
+    long incli=1;
 
     a.GetIK(incli,orient,lengths);
     cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
     double posan1, posan2, posan3;
-    posan1=(0.1-lengths[0])*180/(0.01*M_PI);
-    posan2=(0.1-lengths[1])*180/(0.01*M_PI);
-    posan3=(0.1-lengths[2])*180/(0.01*M_PI);
+    posan1=(0.1095-lengths[0])*180/(0.01*M_PI);
+    posan2=(0.1095-lengths[1])*180/(0.01*M_PI);
+    posan3=(0.1095-lengths[2])*180/(0.01*M_PI);
+
     cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
 
     //comment if motors already started
@@ -46,17 +57,21 @@ int main ()
 //    m2.SetupPositionMode(360,360);
 //    m3.SetupPositionMode(360,360);
 
-    for (int i=0;i<17;i++)
+    for (int i=0;i<8;i++)
     {
 
-        orient += 5;
+
+    for (int i=0;i<13;i++)
+    {
+
+       // orient += 5;
 
         a.GetIK(incli,orient,lengths);
         cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
         double posan1, posan2, posan3;
-        posan1=(0.1-lengths[0])*180/(0.01*M_PI);
-        posan2=(0.1-lengths[1])*180/(0.01*M_PI);
-        posan3=(0.1-lengths[2])*180/(0.01*M_PI);
+        posan1=(0.1095-lengths[0])*180/(0.01*M_PI);
+        posan2=(0.1095-lengths[1])*180/(0.01*M_PI);
+        posan3=(0.1095-lengths[2])*180/(0.01*M_PI);
         cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
 
         graph << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3 << endl;
@@ -68,15 +83,27 @@ int main ()
 
         //sleep(2);
         double dts=0.01;
-        for (double t=0;t<1; t+=dts)
+        for (double t=0;t<0.5; t+=dts)
         {
             usleep(dts*1000*1000);
-            cout << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
-            cout << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+            cout  << " orin: " << orient <<endl;
+            cout  << " incl: " << incli <<endl;
+            cout  << " Real: " << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
+            cout << " Consigna: " << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+
             graph << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
             graph << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
         }
+        incli +=3;
+
+    }
+    orient += 45;
+    incli=1;
+
+    m1.SetPosition(0);
+    m2.SetPosition(0);
+    m3.SetPosition(0);
 
     }
 

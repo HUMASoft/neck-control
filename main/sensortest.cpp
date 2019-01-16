@@ -25,8 +25,8 @@ int main ()
 
     TableKinematics a("../neck-control/ik.csv");
     vector<double> lengths(3);
-    long orient=90;
-    long incli=25;
+    long orient=1;
+    long incli=1;
 
     a.GetIK(incli,orient,lengths);
     cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
@@ -48,10 +48,10 @@ int main ()
     m2.SetupPositionMode(360,360);
     m3.SetupPositionMode(360,360);
 
-    for (int i=0;i<17;i++)
+    for (int i=0;i<1;i++)
     {
 
-        orient += 5;
+        //orient += 5;
 
         a.GetIK(incli,orient,lengths);
         cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
@@ -61,7 +61,7 @@ int main ()
         posan3=(0.1-lengths[2])*180/(0.01*M_PI);
         cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
 
-        graph << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3 << endl;
+        //graph << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3 << endl;
 
         m1.SetPosition(posan1);
         m2.SetPosition(posan2);

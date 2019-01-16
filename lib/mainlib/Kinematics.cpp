@@ -10,7 +10,7 @@ Kinematics::Kinematics()
 TableKinematics::TableKinematics()
 {
 
-    Initialize("ik.csv", vector<int>{40,360});
+    Initialize("ik.csv", vector<int>{41,360});
 }
 
 
@@ -18,7 +18,7 @@ TableKinematics::TableKinematics()
 TableKinematics::TableKinematics(string path)
 {
 
-    Initialize(path, vector<int>{40,360});
+    Initialize(path, vector<int>{41,360});
 }
 
 long TableKinematics::GetIK(long theta, long phi, vector<double> & lengths)
