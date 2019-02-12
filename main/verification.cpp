@@ -4,6 +4,7 @@
 #include "SocketCanPort.h"
 #include "mainlib.h"
 #include "math.h"
+#include "ToolsFControl.h"
 
 #include "SerialArduino.h"
 
@@ -12,7 +13,8 @@
 
 int main ()
 {
-    double dts=0.01;
+    double dts=0.01; //0.01
+    ofstream graph("graph.csv",std::ofstream::out);
 
     //--Controllers--
     //fpi w=25 pm=70 //kept from last experiments.
@@ -49,8 +51,8 @@ int main ()
 
 
     //--sensors--
-//    SerialArduino tilt;
-//    double incSensor,oriSensor;
+    SerialArduino tilt;
+    double incSensor,oriSensor;
 
     //--Can port communications--
     SocketCanPort pm1("can1");
@@ -62,7 +64,7 @@ int main ()
 
 
     //--Neck Kinematics--
-    TableKinematics a("../neck-control/arco1075.csv");
+    TableKinematics a("../neck-control/arco107.csv");
     vector<double> lengths(3);
 
 
@@ -99,21 +101,46 @@ int main ()
     //sysid
 //    OnlineSystemIdentification id;
 
-    long stepsize=0;
-
-    long smallstep=5; //update orient=orient+1 every 10 steps
+//    long stepsize=0;
+//
+//    long smallstep=5; //update orient=orient+1 every 10 steps
     long orient=1;
     long incli=25;
-    double probe;
+//    double probe;
 
+    a.GetIK(incli,orient,lengths);
+    cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
+    posan1=(0.109-lengths[0])*180/(0.01*M_PI);
+    posan2=(0.109-lengths[1])*180/(0.01*M_PI);
+    posan3=(0.109-lengths[2])*180/(0.01*M_PI);
+    cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3 <<  endl;
+    //sleep(5);
+    cout << "Sensor ready " <<  endl;
 
-    for (int i=0; i<2800 ;i++)
+    //int orient_vect [] = {45, 135, 315, 225};
+    //int incl_vect [] = {5, 15, 5, 15};
+//    ToolsFControl tools;
+//    tools.SetSamplingTime(dts);
+
+    for (int i=0; i<359; i++)
     {
+        orient += 1;
+        tilt.ReadSensor(incSensor,oriSensor);
+        cout << "incli_sen: " << incSensor << " , orient_sen: " << oriSensor <<  endl;
+
+        for (double t=0;t<0.25;t+=dts)
+        {
+//               usleep(dts*1000*1000);
+//         tools.WaitSamplingTime();
 
         //***************set target for every step here:
-        if (i%smallstep==0) orient++;
 
-        orient = (orient+stepsize) % 359; //modulo 359;
+
+
+
+//        if (i%smallstep==0) orient++;
+
+//        orient = (orient+stepsize) % 359; //modulo 359;
 //        incli= (incli+stepsize/10) % 35; //modulo 359;
 //        if (incli==0) incli=1;
 
@@ -121,12 +148,13 @@ int main ()
         //**************set target for every step here end.
 
 
-        cout << "orient " << orient  << ", incli " << incli << endl;
+        cout  << "incli " << incli << ",  orient " << orient  << endl;
+        cout << "incli_sen: " << incSensor << " , orient_sen: " << oriSensor <<  endl;
         a.GetIK(incli,orient,lengths);
 //        cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
-        posan1=(0.1095-lengths[0])*180/(0.01*M_PI);
-        posan2=(0.1095-lengths[1])*180/(0.01*M_PI);
-        posan3=(0.1095-lengths[2])*180/(0.01*M_PI);
+        posan1=(0.109-lengths[0])*180/(0.01*M_PI);
+        posan2=(0.109-lengths[1])*180/(0.01*M_PI);
+        posan3=(0.109-lengths[2])*180/(0.01*M_PI);
         cout << "TARGET: , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
     //    double sats=40;
@@ -177,20 +205,30 @@ int main ()
 
 //            usleep(dts*1000*1000);
 
-
 //        }
 
+
         cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
+        graph << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() << " , " << posan1  << " , " << posan2 << " , " << posan3 << " , " << incSensor << " , " << oriSensor <<endl;
 
-        usleep(dts*1000*1000);
+        }
 
-    }
 
-    m1.SetTorque(0);
-    m2.SetTorque(0);
-    m3.SetTorque(0);
+   }
 
-    sleep(1);
+     sleep(1);
+     cout << "FIN" << endl;
+     sleep(2);
+
+
+//    m1.SetPosition(0);
+//    m2.SetPosition(0);
+//    m3.SetPosition(0);
+
+//    m1.SetTorque(0);
+//    m2.SetTorque(0);
+//    m3.SetTorque(0);
+
 
     targets.close();
     controls.close();
@@ -202,6 +240,3 @@ int main ()
 
 
 }
-
-
-

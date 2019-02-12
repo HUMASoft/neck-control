@@ -45,7 +45,6 @@ target_link_libraries( closedloop mainlib )
 add_executable(start main/start.cpp)
 target_link_libraries( start mainlib )
 
-
 add_executable(stop main/stop.cpp)
 target_link_libraries( stop mainlib )
 
@@ -57,3 +56,15 @@ target_link_libraries( sensortest mainlib )
 
 add_executable(demo360 main/demo360.cpp)
 target_link_libraries( demo360 mainlib )
+
+add_executable(set-torque main/set-torque.cpp)
+target_link_libraries( set-torque mainlib )
+
+add_executable(trayectoria main/trayectoria.cpp)
+target_link_libraries( trayectoria mainlib )
+
+add_executable(verification main/verification.cpp)
+target_link_libraries( verification mainlib )
+
+add_executable(sensor-read main/sensor-read.cpp)
+target_link_libraries( sensor-read mainlib )

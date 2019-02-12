@@ -12,7 +12,77 @@
 
 int main ()
 {
-    double dts=0.01;
+    double dts=0.01; //0.01
+    ofstream graph("graph.csv",std::ofstream::out);
+
+    //.................vector trayectoria
+    int x[90], y[90], z[90];
+    int H[90];
+    int rel[1][272];
+
+        //variable
+        for(int i=0;i<90;i++)
+       {
+            x[i]=i+90; //orient 90 to 180
+            y[i]=359-i;//orient 359 to 270
+            z[i]=i;
+            //cout << y[i] << endl;
+       }
+
+        for (int r=0;r<30;r++)
+        {
+           for (int s=0;s<3;s++)
+           {
+             H[3*r+s]=r+10;
+             //cout << H[3*r+s] << endl;
+           }
+        }
+
+  //bloque 90-180
+          for(int i=0;i<90;i++)
+       {
+            rel[0][i]=H[i]; //inclinacion
+            rel[1][i]=x[i]; // orientacion
+        }
+
+    //origen
+        rel[0][90]=29;
+        rel[1][90]=180;
+        rel[0][91]=19;
+        rel[1][91]=180;
+        rel[0][92]=9;
+        rel[1][92]=180;
+        rel[0][93]=1;
+        rel[1][93]=1;
+
+          //bloque 360-270
+        for(int i=94;i<184;i++)
+       {
+            rel[0][i]=H[i-94];
+            rel[1][i]=y[i-94];
+        }
+
+
+        //origen
+        //origen
+            rel[0][184]=29;
+            rel[1][184]=270;
+            rel[0][185]=19;
+            rel[1][185]=270;
+            rel[0][186]=9;
+            rel[1][186]=270;
+            rel[0][187]=1;
+            rel[1][187]=1;
+
+
+
+    //result
+        for(int i=0;i<188;i++)
+       {
+            cout << rel[0][i] <<" ";
+            cout << rel[1][i] << endl;
+        }
+    //........................................
 
     //--Controllers--
     //fpi w=25 pm=70 //kept from last experiments.
@@ -103,17 +173,32 @@ int main ()
 
     long smallstep=5; //update orient=orient+1 every 10 steps
     long orient=1;
-    long incli=25;
+    long incli=1;
     double probe;
 
+    //int orient_vect [] = {45, 135, 315, 225};
+    //int incl_vect [] = {5, 15, 5, 15};
 
-    for (int i=0; i<2800 ;i++)
+    for (int i=0; i<2; i++)
     {
 
-        //***************set target for every step here:
-        if (i%smallstep==0) orient++;
+    for (int i=0; i<188; i++)
+    {
+        orient = rel[1][i];
+        incli = rel[0][i];
 
-        orient = (orient+stepsize) % 359; //modulo 359;
+
+        for (double t=0;t<0.05;t+=dts)
+    {
+            usleep(dts*1000*1000);
+        //***************set target for every step here:
+
+
+
+
+//        if (i%smallstep==0) orient++;
+
+//        orient = (orient+stepsize) % 359; //modulo 359;
 //        incli= (incli+stepsize/10) % 35; //modulo 359;
 //        if (incli==0) incli=1;
 
@@ -121,7 +206,7 @@ int main ()
         //**************set target for every step here end.
 
 
-        cout << "orient " << orient  << ", incli " << incli << endl;
+        cout  << "incli " << incli << ",  orient " << orient  << endl;
         a.GetIK(incli,orient,lengths);
 //        cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
         posan1=(0.1095-lengths[0])*180/(0.01*M_PI);
@@ -177,20 +262,31 @@ int main ()
 
 //            usleep(dts*1000*1000);
 
-
 //        }
 
         cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
+        graph << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() << " , " << posan1  << " , " << posan2 << " , " << posan3 <<endl;
 
-        usleep(dts*1000*1000);
+        }
 
-    }
+   }
 
-    m1.SetTorque(0);
-    m2.SetTorque(0);
-    m3.SetTorque(0);
+   }
 
-    sleep(1);
+     sleep(1);
+     cout << "FIN" << endl;
+     sleep(2);
+
+
+    m1.SetPosition(0);
+    m2.SetPosition(0);
+    m3.SetPosition(0);
+
+//    m1.SetTorque(0);
+//    m2.SetTorque(0);
+//    m3.SetTorque(0);
+
+    sleep(2);
 
     targets.close();
     controls.close();
