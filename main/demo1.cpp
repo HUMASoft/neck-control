@@ -13,6 +13,7 @@
 int main ()
 {
     double dts=0.01;
+    float lg0=0.1;
 
     //--Controllers--
     //fpi w=25 pm=70 //kept from last experiments.
@@ -62,7 +63,7 @@ int main ()
 
 
     //--Neck Kinematics--
-    TableKinematics a("../neck-control/arco1075.csv");
+    TableKinematics a("../neck-control/spring097.csv");
     vector<double> lengths(3);
 
 
@@ -124,9 +125,9 @@ int main ()
         cout << "orient " << orient  << ", incli " << incli << endl;
         a.GetIK(incli,orient,lengths);
 //        cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
-        posan1=(0.1095-lengths[0])*180/(0.01*M_PI);
-        posan2=(0.1095-lengths[1])*180/(0.01*M_PI);
-        posan3=(0.1095-lengths[2])*180/(0.01*M_PI);
+        posan1=(lg0-lengths[0])*180/(0.01*M_PI);
+        posan2=(lg0-lengths[1])*180/(0.01*M_PI);
+        posan3=(lg0-lengths[2])*180/(0.01*M_PI);
         cout << "TARGET: , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
     //    double sats=40;

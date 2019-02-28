@@ -45,17 +45,17 @@ int main ()
     cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
 
     //comment if motors already started
-    m1.Reset();
-    m2.Reset();
-    m3.Reset();
+//    m1.Reset();
+//    m2.Reset();
+//    m3.Reset();
 
-    m1.SwitchOn();
-    m2.SwitchOn();
-    m3.SwitchOn();
+//    m1.SwitchOn();
+//    m2.SwitchOn();
+//    m3.SwitchOn();
 
-    m1.SetupPositionMode(360,360);
-    m2.SetupPositionMode(360,360);
-    m3.SetupPositionMode(360,360);
+//    m1.SetupPositionMode(360,360);
+//    m2.SetupPositionMode(360,360);
+//    m3.SetupPositionMode(360,360);
 
     //for (int k=0;k=2;k++)
     //{
@@ -95,7 +95,7 @@ int main ()
             //graph << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
         }
-       incli += 3;
+       //incli += 3;
 
 
     }

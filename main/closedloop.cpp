@@ -28,7 +28,7 @@ int main ()
     long orient=1;
     long incli=35;
 
-    double incSensor,oriSensor;
+    float incSensor,oriSensor;
 
     a.GetIK(incli,orient,lengths);
     cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
@@ -80,7 +80,7 @@ int main ()
 //            graph << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
 //            graph << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
-            tilt.ReadSensor(incSensor,oriSensor);
+            tilt.readSensor(incSensor,oriSensor);
             cout << t << " , incli: " << incSensor << " , orient: " << oriSensor <<  endl;
             graph << t << " , incli: " << incSensor << " , orient: " << oriSensor <<  endl;
 

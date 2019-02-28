@@ -13,8 +13,14 @@
 
 int main ()
 {
-    double dts=0.01; //0.01
+        //--sensors--
+        SerialArduino tilt;
+        float incSensor,oriSensor;
+
+        double dts=0.01; //0.01
     ofstream graph("graph.csv",std::ofstream::out);
+
+    long incl_value=20;
 
     //--Controllers--
     //fpi w=25 pm=70 //kept from last experiments.
@@ -24,10 +30,10 @@ int main ()
     SystemBlock internal3(npi,dpi);
     SystemBlock internal2(npi,dpi);
 
-////    string method("pi");
-//    PIDBlock pi1(1,10,0,dts);
-//    PIDBlock pi2(1,10,0,dts);
-//    PIDBlock pi3(1,10,0,dts);
+//    string method("pi");
+//    PIDBlock internal1(1,10,0,dts);
+//    PIDBlock internal2(1,10,0,dts);
+//    PIDBlock internal3(1,10,0,dts);
 
 //    string method("2isomw10p100");
 //    vector<double> npd ={0.7178 ,  -2.0893 ,  -1.3030  ,  2.9270};
@@ -38,7 +44,7 @@ int main ()
 
     string method("w10p60pid"); // entero
      PIDBlock external1(2,1,0.1,dts);
-     PIDBlock external2(2,1,0.1,dts);
+     PIDBlock external2(2,3,0.1,dts);
      PIDBlock external3(2,1,0.1,dts);
 
 
@@ -50,10 +56,6 @@ int main ()
 //    ofstream graph("graph.csv",std::ofstream::out);
 
 
-    //--sensors--
-    SerialArduino tilt;
-    double incSensor,oriSensor;
-
     //--Can port communications--
     SocketCanPort pm1("can1");
     CiA402Device m1 (1, &pm1);
@@ -64,7 +66,7 @@ int main ()
 
 
     //--Neck Kinematics--
-    TableKinematics a("../neck-control/arco107.csv");
+    TableKinematics a("../neck-control/spring097.csv");
     vector<double> lengths(3);
 
 
@@ -74,7 +76,7 @@ int main ()
     double ep3,ev3,cs3;
     double posan1, posan2, posan3;
 
-    //Motor setup
+//    Motor setup
     m1.Reset();
     m1.SwitchOn();
 
@@ -94,10 +96,6 @@ int main ()
     m1.Setup_Torque_Mode();
     m2.Setup_Torque_Mode();
 
-    sleep(1);
-
-
-
     //sysid
 //    OnlineSystemIdentification id;
 
@@ -105,57 +103,97 @@ int main ()
 //
 //    long smallstep=5; //update orient=orient+1 every 10 steps
     long orient=1;
-    long incli=25;
-//    double probe;
+    long incli=1;
+    float lg0=0.099;
+    sleep(4);
 
+
+    ToolsFControl tools;
+    tools.SetSamplingTime(dts);
+
+    //-----------Soft Start
+
+    for (int i=1; i<incl_value; i++){
+    incli ++;
+    orient=1;
+
+    tilt.readSensor(incSensor,oriSensor);
+
+    for (double t=0;t<0.05;t+=dts){
+
+
+    cout  << "incli " << incli << ",  orient " << orient  << endl;
+    cout << "incli_sen: " << incSensor << " , orient_sen: " << oriSensor <<  endl;
     a.GetIK(incli,orient,lengths);
-    cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
-    posan1=(0.109-lengths[0])*180/(0.01*M_PI);
-    posan2=(0.109-lengths[1])*180/(0.01*M_PI);
-    posan3=(0.109-lengths[2])*180/(0.01*M_PI);
-    cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3 <<  endl;
-    //sleep(5);
-    cout << "Sensor ready " <<  endl;
+    posan1=(lg0-lengths[0])*180/(0.01*M_PI);
+    posan2=(lg0-lengths[1])*180/(0.01*M_PI);
+    posan3=(lg0-lengths[2])*180/(0.01*M_PI);
+    cout << "TARGET: , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
-    //int orient_vect [] = {45, 135, 315, 225};
-    //int incl_vect [] = {5, 15, 5, 15};
-//    ToolsFControl tools;
-//    tools.SetSamplingTime(dts);
+//    double sats=40;
+//    pd1.SetSaturation(-sats,sats);
+//    pd2.SetSaturation(-sats,sats);
+//    pd3.SetSaturation(-sats,sats);
 
-    for (int i=0; i<359; i++)
+//        m1.SetPosition(posan1);
+//        m2.SetPosition(posan2);
+//        m3.SetPosition(posan3);
+    //MAIN CONTROL LOOP
+//       double interval=0.1*stepsize; //in seconds
+//        for (double t=0;t<interval; t+=dts)
+//        {
+
+
+        ep1=posan1-m1.GetPosition();
+        cs1=ep1 > external1;
+        ev1= cs1-m1.GetVelocity();
+        m1.SetTorque((ev1 > internal1));
+
+
+//            probe =(ev1 > internal1);
+//            cout << "probe " << probe << endl;
+//            m1.SetTorque(probe);
+//            id.UpdateSystem(pd1.GetState(),m1.GetPosition());
+
+
+        ep2=posan2-m2.GetPosition();
+        cs2=ep2 > external2;
+        ev2= cs2-m2.GetVelocity();
+        m2.SetTorque((ev2 > internal2));
+
+        ep3=posan3-m3.GetPosition();
+        cs3=ep3 > external3;
+        ev3= cs3-m3.GetVelocity();
+        m3.SetTorque((ev3 > internal3));
+
+
+        cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
+        graph << t << " , " << posan1 << " , " << m1.GetPosition() << " , " << posan2 << " , " << m2.GetPosition()  << " , " << posan3 <<  " , " << m3.GetPosition()  << " , " << incli << " , " << incSensor   << " , " << orient   << " , " << oriSensor <<endl;
+
+        tools.WaitSamplingTime();
+    }
+ }
+
+    for (int i=1; i<3; i++){
+
+
+        //------ Program Main
+    for (int i=1; i<359; i++)
     {
+        incli=incl_value;
+        //orient=180;
         orient += 1;
-        tilt.ReadSensor(incSensor,oriSensor);
-        cout << "incli_sen: " << incSensor << " , orient_sen: " << oriSensor <<  endl;
-
-        for (double t=0;t<0.25;t+=dts)
+        tilt.readSensor(incSensor,oriSensor);
+        for (double t=0;t<0.05;t+=dts)
         {
-//               usleep(dts*1000*1000);
-//         tools.WaitSamplingTime();
-
-        //***************set target for every step here:
-
-
-
-
-//        if (i%smallstep==0) orient++;
-
-//        orient = (orient+stepsize) % 359; //modulo 359;
-//        incli= (incli+stepsize/10) % 35; //modulo 359;
-//        if (incli==0) incli=1;
-
-
-        //**************set target for every step here end.
-
-
+        //cout  << " Tiempo: " << t << endl;
         cout  << "incli " << incli << ",  orient " << orient  << endl;
         cout << "incli_sen: " << incSensor << " , orient_sen: " << oriSensor <<  endl;
         a.GetIK(incli,orient,lengths);
-//        cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
-        posan1=(0.109-lengths[0])*180/(0.01*M_PI);
-        posan2=(0.109-lengths[1])*180/(0.01*M_PI);
-        posan3=(0.109-lengths[2])*180/(0.01*M_PI);
-        cout << "TARGET: , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+        posan1=(lg0-lengths[0])*180/(0.01*M_PI);
+        posan2=(lg0-lengths[1])*180/(0.01*M_PI);
+        posan3=(lg0-lengths[2])*180/(0.01*M_PI);
+        //cout << "TARGET: , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
     //    double sats=40;
     //    pd1.SetSaturation(-sats,sats);
@@ -208,35 +246,93 @@ int main ()
 //        }
 
 
-        cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
-        graph << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() << " , " << posan1  << " , " << posan2 << " , " << posan3 << " , " << incSensor << " , " << oriSensor <<endl;
 
-        }
+            cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
+            graph << t << " , " << posan1 << " , " << m1.GetPosition() << " , " << posan2 << " , " << m2.GetPosition()  << " , " << posan3 <<  " , " << m3.GetPosition()  << " , " << incli << " , " << incSensor   << " , " << orient   << " , " << oriSensor <<endl;
+
+            tools.WaitSamplingTime();
+//                        usleep(dts*1000*1000);
+            }
 
 
+    }
+    orient=1;
    }
 
-     sleep(1);
-     cout << "FIN" << endl;
-     sleep(2);
+
+    //-----------Soft Final
+    orient=1;
+    for (int i=1; i<incl_value; i++){
+    incli --;
 
 
-//    m1.SetPosition(0);
-//    m2.SetPosition(0);
-//    m3.SetPosition(0);
+    tilt.readSensor(incSensor,oriSensor);
 
-//    m1.SetTorque(0);
-//    m2.SetTorque(0);
-//    m3.SetTorque(0);
+    for (double t=0;t<0.05;t+=dts){
 
+
+    cout  << "incli " << incli << ",  orient " << orient  << endl;
+    cout << "incli_sen: " << incSensor << " , orient_sen: " << oriSensor <<  endl;
+    a.GetIK(incli,orient,lengths);
+    posan1=(lg0-lengths[0])*180/(0.01*M_PI);
+    posan2=(lg0-lengths[1])*180/(0.01*M_PI);
+    posan3=(lg0-lengths[2])*180/(0.01*M_PI);
+    cout << "TARGET: , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+
+//    double sats=40;
+//    pd1.SetSaturation(-sats,sats);
+//    pd2.SetSaturation(-sats,sats);
+//    pd3.SetSaturation(-sats,sats);
+
+//        m1.SetPosition(posan1);
+//        m2.SetPosition(posan2);
+//        m3.SetPosition(posan3);
+    //MAIN CONTROL LOOP
+//       double interval=0.1*stepsize; //in seconds
+//        for (double t=0;t<interval; t+=dts)
+//        {
+
+
+        ep1=posan1-m1.GetPosition();
+        cs1=ep1 > external1;
+        ev1= cs1-m1.GetVelocity();
+        m1.SetTorque((ev1 > internal1));
+
+
+//            probe =(ev1 > internal1);
+//            cout << "probe " << probe << endl;
+//            m1.SetTorque(probe);
+//            id.UpdateSystem(pd1.GetState(),m1.GetPosition());
+
+
+        ep2=posan2-m2.GetPosition();
+        cs2=ep2 > external2;
+        ev2= cs2-m2.GetVelocity();
+        m2.SetTorque((ev2 > internal2));
+
+        ep3=posan3-m3.GetPosition();
+        cs3=ep3 > external3;
+        ev3= cs3-m3.GetVelocity();
+        m3.SetTorque((ev3 > internal3));
+
+
+        cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
+        graph << t << " , " << posan1 << " , " << m1.GetPosition() << " , " << posan2 << " , " << m2.GetPosition()  << " , " << posan3 <<  " , " << m3.GetPosition()  << " , " << incli << " , " << incSensor   << " , " << orient   << " , " << oriSensor <<endl;
+
+        tools.WaitSamplingTime();
+    }
+
+    }
+
+    cout << "FIN" << endl;
+    m1.SetTorque(0);
+    m2.SetTorque(0);
+    m3.SetTorque(0);
+
+    sleep(1);
 
     targets.close();
     controls.close();
     responses.close();
-
-    cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
-
     return 0;
-
-
 }
