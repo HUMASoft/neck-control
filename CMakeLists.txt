@@ -68,3 +68,6 @@ target_link_libraries( verification mainlib )
 
 add_executable(sensor-read main/sensor-read.cpp)
 target_link_libraries( sensor-read mainlib )
+
+add_executable(spring_test main/spring_test.cpp)
+target_link_libraries( spring_test mainlib )
