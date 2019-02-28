@@ -4,6 +4,7 @@
 #include "SocketCanPort.h"
 #include "mainlib.h"
 #include "math.h"
+#include "ToolsFControl.h"
 
 #include "SerialArduino.h"
 
@@ -14,6 +15,12 @@ int main ()
 {
     double dts=0.01; //0.01
     ofstream graph("graph.csv",std::ofstream::out);
+
+    //--sensors--
+    SerialArduino tilt;
+    double incSensor,oriSensor;
+    cout << "Sensor ready " <<  endl;
+
 
     //.................vector trayectoria
     int x[90], y[90], z[90];
@@ -84,6 +91,7 @@ int main ()
         }
     //........................................
 
+
     //--Controllers--
     //fpi w=25 pm=70 //kept from last experiments.
     vector<double> npi ={0.2916 ,  -5.3981 ,   0.2415  ,  5.5243};
@@ -92,7 +100,7 @@ int main ()
     SystemBlock internal3(npi,dpi);
     SystemBlock internal2(npi,dpi);
 
-////    string method("pi");
+//    string method("pi");
 //    PIDBlock pi1(1,10,0,dts);
 //    PIDBlock pi2(1,10,0,dts);
 //    PIDBlock pi3(1,10,0,dts);
@@ -109,7 +117,6 @@ int main ()
      PIDBlock external2(2,1,0.1,dts);
      PIDBlock external3(2,1,0.1,dts);
 
-
     //--savefiles--
     string folder("/home/humasoft/Escritorio/");
     ofstream targets (folder+method+".targets.csv");
@@ -117,10 +124,6 @@ int main ()
     ofstream controls (folder+method+".controls.csv");
 //    ofstream graph("graph.csv",std::ofstream::out);
 
-
-    //--sensors--
-//    SerialArduino tilt;
-//    double incSensor,oriSensor;
 
     //--Can port communications--
     SocketCanPort pm1("can1");
@@ -131,8 +134,9 @@ int main ()
     CiA402Device m3 (3, &pm3);
 
 
+
     //--Neck Kinematics--
-    TableKinematics a("../neck-control/arco1075.csv");
+    TableKinematics a("../neck-control/spring097.csv");
     vector<double> lengths(3);
 
 
@@ -162,22 +166,27 @@ int main ()
     m1.Setup_Torque_Mode();
     m2.Setup_Torque_Mode();
 
-    sleep(1);
+
 
 
 
     //sysid
-//    OnlineSystemIdentification id;
+//    OnlineSystemId005entification id;
 
-    long stepsize=0;
-
-    long smallstep=5; //update orient=orient+1 every 10 steps
     long orient=1;
     long incli=1;
-    double probe;
+    float lg0=0.105;
 
-    //int orient_vect [] = {45, 135, 315, 225};
-    //int incl_vect [] = {5, 15, 5, 15};
+    a.GetIK(incli,orient,lengths);
+//    cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
+    posan1=(lg0-lengths[0])*180/(0.01*M_PI);
+    posan2=(lg0-lengths[1])*180/(0.01*M_PI);
+    posan3=(lg0-lengths[2])*180/(0.01*M_PI);
+    cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3 <<  endl;
+    sleep(3);
+
+    ToolsFControl tools;
+    tools.SetSamplingTime(dts);
 
     for (int i=0; i<2; i++)
     {
@@ -186,14 +195,10 @@ int main ()
     {
         orient = rel[1][i];
         incli = rel[0][i];
-
-
-        for (double t=0;t<0.05;t+=dts)
-    {
-            usleep(dts*1000*1000);
+//        incSensor = tilt.ReadInclination();
+//        oriSensor = tilt.ReadOrientation();
+        for (double t=0;t<0.5;t+=dts){
         //***************set target for every step here:
-
-
 
 
 //        if (i%smallstep==0) orient++;
@@ -207,11 +212,11 @@ int main ()
 
 
         cout  << "incli " << incli << ",  orient " << orient  << endl;
+        cout << "incli_sen: " << incSensor << " , orient_sen: " << oriSensor <<  endl;
         a.GetIK(incli,orient,lengths);
-//        cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
-        posan1=(0.1095-lengths[0])*180/(0.01*M_PI);
-        posan2=(0.1095-lengths[1])*180/(0.01*M_PI);
-        posan3=(0.1095-lengths[2])*180/(0.01*M_PI);
+        posan1=(lg0-lengths[0])*180/(0.01*M_PI);
+        posan2=(lg0-lengths[1])*180/(0.01*M_PI);
+        posan3=(lg0-lengths[2])*180/(0.01*M_PI);
         cout << "TARGET: , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
     //    double sats=40;
@@ -264,40 +269,27 @@ int main ()
 
 //        }
 
-        cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
-        graph << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() << " , " << posan1  << " , " << posan2 << " , " << posan3 <<endl;
+            cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
+            graph << t << " , " << posan1 << " , " << m1.GetPosition() << " , " << posan2 << " , " << m2.GetPosition()  << " , " << posan3 <<  " , " << m3.GetPosition()  << " , " << incli << " , " << incSensor   << " , " << orient   << " , " << oriSensor <<endl;
 
-        }
-
+            tools.WaitSamplingTime();
+//                        usleep(dts*1000*1000);
+            }
    }
 
    }
+
+     cout << "FIN" << endl;
+     m1.SetTorque(0);
+     m2.SetTorque(0);
+     m3.SetTorque(0);
 
      sleep(1);
-     cout << "FIN" << endl;
-     sleep(2);
 
+     targets.close();
+     controls.close();
+     responses.close();
 
-    m1.SetPosition(0);
-    m2.SetPosition(0);
-    m3.SetPosition(0);
-
-//    m1.SetTorque(0);
-//    m2.SetTorque(0);
-//    m3.SetTorque(0);
-
-    sleep(2);
-
-    targets.close();
-    controls.close();
-    responses.close();
-
-    cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3;
-
-    return 0;
-
+     return 0;
 
 }
-
-
-
