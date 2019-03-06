@@ -15,6 +15,7 @@
 int main ()
 {
 
+<<<<<<< HEAD
 
     SerialArduino tilt;
 
@@ -163,6 +164,8 @@ int main ()
         m1.SetPosition(0);
         m2.SetPosition(0);
         m3.SetPosition(0);
+=======
+>>>>>>> 5402ccf1a7a2ecccefb7cf61c31000acbfcb401c
     return 0;
 
 

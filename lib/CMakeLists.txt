@@ -5,6 +5,12 @@ cmake_minimum_required(VERSION 2.8)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+#Dependencies
+#1-eigen
+find_package(Eigen3 REQUIRED NO_MODULE)
+message(STATUS "EIGEN: " ${EIGEN3_VERSION} " (internal)")
+include_directories(${EIGEN3_INCLUDE_DIR})
+
 aux_source_directory(mainlib/ SRC_LIST)
 
 add_subdirectory(CiA402Device/)
