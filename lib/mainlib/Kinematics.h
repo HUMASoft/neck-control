@@ -7,6 +7,11 @@
 #include <fstream>
 #include <sstream>
 #include <stdio.h>
+
+#include <Eigen/Dense>
+#include <math.h>
+using namespace Eigen;
+
 using namespace std;
 
 ///base abstract kinematics class
@@ -34,6 +39,20 @@ private:
     vector < vector<double> > lookupTable;
 };
 
+
+///Inverse kinematic algorithm
+class GeoInkinematics
+{
+public:
+    GeoInkinematics();
+    long GeometricsInversoKimenatics(double incl,double orien, vector<double> &lengths);
+
+private:
+    double theta,phi;
+    double a,b;
+    double L0;
+    double t11, t12, t13, t21, t22, t23, t31, t32, t33, R, s0, t0, P, L;
+};
 
 #endif // KINEMATICS_H
 
