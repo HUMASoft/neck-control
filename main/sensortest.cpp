@@ -46,12 +46,10 @@ int main ()
 
     cout << "pos1 " << posan1  << ", pos2 " << posan2 << ", pos3 " << posan3 <<  endl;
 
-    double incSensor,oriSensor;
-<<<<<<< HEAD
+    float incSensor,oriSensor;
+
     double dts=0.01;
-=======
-    double dts=0.02;
->>>>>>> refs/remotes/origin/master
+
 //    incSensor = tilt.ReadInclination();
 //    oriSensor = tilt.ReadOrientation();
 
@@ -82,17 +80,11 @@ int main ()
 
 
     for (int i=0;i<10;i++){
-<<<<<<< HEAD
 
-        //.............HIGHT
-
-        incli =20;
-=======
 
         //.............HIGHT
 
         incli =30;
->>>>>>> refs/remotes/origin/master
         orient=180;
 
         a.GetIK(incli,orient,lengths);
@@ -118,11 +110,10 @@ int main ()
         {
             usleep(dts*1000*1000);
 //          tools.WaitSamplingTime();
-<<<<<<< HEAD
+
             tilt.readSensor(incSensor,oriSensor);
-=======
-//            tilt.ReadSensor(incSensor,oriSensor);
->>>>>>> refs/remotes/origin/master
+
+
 //            incSensor = tilt.ReadInclination();
 //            oriSensor = tilt.ReadOrientation();
             //cout  << " orin: " << orient <<endl;

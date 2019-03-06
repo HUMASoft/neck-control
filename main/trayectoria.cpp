@@ -18,7 +18,7 @@ int main ()
 
     //--sensors--
     SerialArduino tilt;
-    double incSensor,oriSensor;
+    float incSensor,oriSensor;
     cout << "Sensor ready " <<  endl;
 
 
@@ -136,7 +136,7 @@ int main ()
 
 
     //--Neck Kinematics--
-    TableKinematics a("../neck-control/spring097.csv");
+    TableKinematics a("../neck-control/arco107.csv");
     vector<double> lengths(3);
 
 
@@ -175,7 +175,7 @@ int main ()
 
     long orient=1;
     long incli=1;
-    float lg0=0.105;
+    float lg0=0.109;
 
     a.GetIK(incli,orient,lengths);
 //    cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
@@ -195,9 +195,10 @@ int main ()
     {
         orient = rel[1][i];
         incli = rel[0][i];
-//        incSensor = tilt.ReadInclination();
-//        oriSensor = tilt.ReadOrientation();
-        for (double t=0;t<0.5;t+=dts){
+
+        tilt.readSensor(incSensor,oriSensor); // read IMU sensor
+
+        for (double t=0;t<0.06;t+=dts){
         //***************set target for every step here:
 
 
@@ -219,31 +220,11 @@ int main ()
         posan3=(lg0-lengths[2])*180/(0.01*M_PI);
         cout << "TARGET: , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
-    //    double sats=40;
-    //    pd1.SetSaturation(-sats,sats);
-    //    pd2.SetSaturation(-sats,sats);
-    //    pd3.SetSaturation(-sats,sats);
-
-//        m1.SetPosition(posan1);
-//        m2.SetPosition(posan2);
-//        m3.SetPosition(posan3);
-        //MAIN CONTROL LOOP
-//       double interval=0.1*stepsize; //in seconds
-//        for (double t=0;t<interval; t+=dts)
-//        {
-
 
             ep1=posan1-m1.GetPosition();
             cs1=ep1 > external1;
             ev1= cs1-m1.GetVelocity();
             m1.SetTorque((ev1 > internal1));
-
-
-//            probe =(ev1 > internal1);
-//            cout << "probe " << probe << endl;
-//            m1.SetTorque(probe);
-//            id.UpdateSystem(pd1.GetState(),m1.GetPosition());
-
 
             ep2=posan2-m2.GetPosition();
             cs2=ep2 > external2;
@@ -254,20 +235,6 @@ int main ()
             cs3=ep3 > external3;
             ev3= cs3-m3.GetVelocity();
             m3.SetTorque((ev3 > internal3));
-
-//              cout << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
-//            controls << t << " , " << cs1 << " , " << cs2 <<  " , " << cs3 <<endl;
-//            responses << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
-
-//            //            cout << t << " , " << m1.GetVelocity() << " , " << m2.GetVelocity() <<  " , " << m3.GetVelocity() <<endl;
-//            //            responses << t << " , " << m1.GetVelocity() << " , " << m2.GetVelocity() <<  " , " << m3.GetVelocity() <<endl;
-
-//            cout << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
-//            targets << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
-
-//            usleep(dts*1000*1000);
-
-//        }
 
             cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
             graph << t << " , " << posan1 << " , " << m1.GetPosition() << " , " << posan2 << " , " << m2.GetPosition()  << " , " << posan3 <<  " , " << m3.GetPosition()  << " , " << incli << " , " << incSensor   << " , " << orient   << " , " << oriSensor <<endl;

@@ -71,3 +71,6 @@ target_link_libraries( sensor-read mainlib )
 
 add_executable(spring_test main/spring_test.cpp)
 target_link_libraries( spring_test mainlib )
+
+add_executable(softneck_test main/softneck_test.cpp)
+target_link_libraries( softneck_test mainlib )

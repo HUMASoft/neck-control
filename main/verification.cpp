@@ -44,7 +44,7 @@ int main ()
 
     string method("w10p60pid"); // entero
      PIDBlock external1(2,1,0.1,dts);
-     PIDBlock external2(2,3,0.1,dts);
+     PIDBlock external2(2,1,0.1,dts);
      PIDBlock external3(2,1,0.1,dts);
 
 
@@ -66,7 +66,7 @@ int main ()
 
 
     //--Neck Kinematics--
-    TableKinematics a("../neck-control/spring097.csv");
+    TableKinematics a("../neck-control/arco107.csv");
     vector<double> lengths(3);
 
 
@@ -104,7 +104,7 @@ int main ()
 //    long smallstep=5; //update orient=orient+1 every 10 steps
     long orient=1;
     long incli=1;
-    float lg0=0.099;
+    float lg0=0.109;
     sleep(4);
 
 
@@ -174,8 +174,7 @@ int main ()
     }
  }
 
-    for (int i=1; i<3; i++){
-
+    for (int i=1; i<20000; i++){
 
         //------ Program Main
     for (int i=1; i<359; i++)
@@ -184,11 +183,12 @@ int main ()
         //orient=180;
         orient += 1;
         tilt.readSensor(incSensor,oriSensor);
-        for (double t=0;t<0.05;t+=dts)
+        for (double t=0;t<0.02;t+=dts)
         {
         //cout  << " Tiempo: " << t << endl;
-        cout  << "incli " << incli << ",  orient " << orient  << endl;
-        cout << "incli_sen: " << incSensor << " , orient_sen: " << oriSensor <<  endl;
+//        cout  << "incli " << incli << ",  orient " << orient  << endl;
+//        cout << "incli_sen: " << incSensor << " , orient_sen: " << oriSensor <<  endl;
+
         a.GetIK(incli,orient,lengths);
         posan1=(lg0-lengths[0])*180/(0.01*M_PI);
         posan2=(lg0-lengths[1])*180/(0.01*M_PI);
@@ -245,10 +245,13 @@ int main ()
 
 //        }
 
+            cout << "error: , ep2:" << ep2 << " ,cs2 :" << cs2 << " ,ev2 :" << ev2 << endl;
+            cout << "error: , ep1:" << ep1 << " ,cs1 :" << cs1 << " ,ev1 :" << ev1 << endl;
+            cout << "error: , ep3:" << ep3 << " ,cs3 :" << cs3 << " ,ev3 :" << ev3 << endl;
 
 
-            cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
-            graph << t << " , " << posan1 << " , " << m1.GetPosition() << " , " << posan2 << " , " << m2.GetPosition()  << " , " << posan3 <<  " , " << m3.GetPosition()  << " , " << incli << " , " << incSensor   << " , " << orient   << " , " << oriSensor <<endl;
+//            cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
+//            graph << t << " , " << posan1 << " , " << m1.GetPosition() << " , " << posan2 << " , " << m2.GetPosition()  << " , " << posan3 <<  " , " << m3.GetPosition()  << " , " << incli << " , " << incSensor   << " , " << orient   << " , " << oriSensor <<endl;
 
             tools.WaitSamplingTime();
 //                        usleep(dts*1000*1000);

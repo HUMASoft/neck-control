@@ -1,4 +1,5 @@
 
+
 #include <iostream>
 #include "Cia402device.h"
 #include "CiA301CommPort.h"
@@ -67,7 +68,7 @@ int main ()
 
 
     //--Neck Kinematics--
-    TableKinematics a("../neck-control/spring097.csv");
+    TableKinematics a("../neck-control/arco107.csv");
     vector<double> lengths(3);
 
 
@@ -94,7 +95,7 @@ int main ()
 
     long orient=1;
     long incli=1;
-    float lg0=0.099;
+    float lg0=0.109;
     sleep(4);
 
 
