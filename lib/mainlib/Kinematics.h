@@ -45,6 +45,7 @@ class GeoInkinematics
 {
 public:
     GeoInkinematics();
+    GeoInkinematics(double  new_a, double new_b, double new_L0);
     long GetIK(double incl,double orien, vector<double> &lengths);
 
 private:

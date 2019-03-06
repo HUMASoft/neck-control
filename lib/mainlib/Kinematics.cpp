@@ -100,10 +100,19 @@ GeoInkinematics::GeoInkinematics()
     L0=0.107;// Neck Lenght
 }
 
+GeoInkinematics::GeoInkinematics(double new_a, double new_b, double new_L0)
+{
+    a=new_a;//m distance between A and base
+    b=new_b;//m distance between B and mobile platform
+    L0=new_L0;// Neck Lenght
+}
+
 long GeoInkinematics::GetIK(double incl, double orien, vector<double> &lengths)
 {
 
+//    if (incl == 0) return -1;
     theta=incl*M_PI/180;
+    if (incl == 0) theta=0.001*M_PI/180;
     phi=orien*M_PI/180;
 
    //Matrix A

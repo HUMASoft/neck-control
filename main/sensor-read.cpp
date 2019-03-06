@@ -31,13 +31,13 @@ int main ()
 //       tilt.ReadSensor(incSensor,oriSensor);
 
        double dts=0.001;
-//        ToolsFControl tools;
-//        tools.SetSamplingTime(dts);
+        ToolsFControl tools;
+        tools.SetSamplingTime(dts);
 
        for (double t=0;t<20; t+=dts)
        {
            //usleep(dts*1000*1000);
-//          tools.WaitSamplingTime();
+          tools.WaitSamplingTime();
 //            tilt.ReadSensor(incSensor,oriSensor);
 
            tilt.readSensor(incSensor,oriSensor);
