@@ -100,7 +100,7 @@ GeoInkinematics::GeoInkinematics()
     L0=0.107;// Neck Lenght
 }
 
-long GeoInkinematics::GeometricsInversoKimenatics(double incl, double orien, vector<double> &lengths)
+long GeoInkinematics::GetIK(double incl, double orien, vector<double> &lengths)
 {
 
     theta=incl*M_PI/180;
@@ -113,7 +113,7 @@ long GeoInkinematics::GeometricsInversoKimenatics(double incl, double orien, vec
         0,            0,           0,
         1,            1,           1;
 
-  cout<<A<<endl;
+//  cout<<A<<endl;
   //Matrix B
   MatrixXd B(4,3);
   B <<  0, -sqrt(3)*b/2, sqrt(3)*b/2,

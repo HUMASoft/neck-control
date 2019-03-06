@@ -17,10 +17,12 @@ add_subdirectory(CiA402Device/)
 add_subdirectory(fcontrol/)
 add_subdirectory(sensor-integration/)
 
-
+#set(SUBDIR_LINK_NAMES ${SUBDIR_LINK_NAMES} ${PROJECT_NAME} PARENT_SCOPE)
 set(SUBDIR_INCLUDE_DIRECTORIES ${SUBDIR_INCLUDE_DIRECTORIES}
     ${CMAKE_CURRENT_SOURCE_DIR}/mainlib
     PARENT_SCOPE)
+
+
 
 ADD_LIBRARY(mainlib SHARED ${SRC_LIST} )
 

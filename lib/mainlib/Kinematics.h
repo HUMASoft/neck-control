@@ -45,7 +45,7 @@ class GeoInkinematics
 {
 public:
     GeoInkinematics();
-    long GeometricsInversoKimenatics(double incl,double orien, vector<double> &lengths);
+    long GetIK(double incl,double orien, vector<double> &lengths);
 
 private:
     double theta,phi;
