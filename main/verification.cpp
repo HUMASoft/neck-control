@@ -174,7 +174,7 @@ int main ()
     }
  }
 
-    for (int i=1; i<20000; i++){
+    for (int i=1; i<3; i++){
 
         //------ Program Main
     for (int i=1; i<359; i++)
@@ -251,7 +251,7 @@ int main ()
 
 
 //            cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
-//            graph << t << " , " << posan1 << " , " << m1.GetPosition() << " , " << posan2 << " , " << m2.GetPosition()  << " , " << posan3 <<  " , " << m3.GetPosition()  << " , " << incli << " , " << incSensor   << " , " << orient   << " , " << oriSensor <<endl;
+            graph << t << " , " << posan1 << " , " << m1.GetPosition() << " , " << posan2 << " , " << m2.GetPosition()  << " , " << posan3 <<  " , " << m3.GetPosition()  << " , " << incli << " , " << incSensor   << " , " << orient   << " , " << oriSensor <<endl;
 
             tools.WaitSamplingTime();
 //                        usleep(dts*1000*1000);

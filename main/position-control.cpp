@@ -29,7 +29,8 @@ int main ()
 
     m1.SetPosition(0);
     m2.SetPosition(0);
-    m3.SetPosition(120);
+    m3.SetPosition(0);
+    sleep (3);
     return 0;
 
 }

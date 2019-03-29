@@ -45,7 +45,7 @@ int main ()
 
     string method("w10p60pid"); // entero
      PIDBlock external1(2,1,0.1,dts);
-     PIDBlock external2(2,3,0.1,dts);
+     PIDBlock external2(2,1,0.1,dts);
      PIDBlock external3(2,1,0.1,dts);
 
 

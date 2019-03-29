@@ -22,7 +22,7 @@ int main ()
         double dts=0.01; //0.01
     ofstream graph("graph.csv",std::ofstream::out);
 
-    long incl_value=20;
+    long incl_value=10;
 
     //--Controllers--
     //fpi w=25 pm=70 //kept from last experiments.
@@ -40,14 +40,19 @@ int main ()
 //    string method("2isomw10p100");
 //    vector<double> npd ={0.7178 ,  -2.0893 ,  -1.3030  ,  2.9270};
 //    vector<double> dpd ={0.0337 , -0.9032 , 0.0631 , 1.0000};
-//    SystemBlock pd1(npd,dpd,1);
-//    SystemBlock pd2(npd,dpd,1);
-//    SystemBlock pd3(npd,dpd,1);
+//    SystemBlock external1(npd,dpd,1);
+//    SystemBlock external2(npd,dpd,1);
+//    SystemBlock external3(npd,dpd,1);
+
+//    string method("w10p60pid"); // entero
+//     PIDBlock external1(2,1,0.1,dts);
+//     PIDBlock external2(2,1,0.1,dts);
+//     PIDBlock external3(2,1,0.1,dts);
 
     string method("w10p60pid"); // entero
-     PIDBlock external1(2,1,0.1,dts);
-     PIDBlock external2(2,3,0.1,dts);
-     PIDBlock external3(2,1,0.1,dts);
+     PIDBlock external1(1.6940724,1.4599718,0.0155608,dts);
+     PIDBlock external2(1.6940724,1.4599718,0.0155608,dts);
+     PIDBlock external3(1.6940724,1.4599718,0.0155608,dts);
 
 
     //--savefiles--
@@ -73,10 +78,11 @@ int main ()
 
 
     //vars
-    double ep1,ev1,cs1;
-    double ep2,ev2,cs2;
-    double ep3,ev3,cs3;
+    double ep1,ev1,cs1,tcs1;
+    double ep2,ev2,cs2,tcs2;
+    double ep3,ev3,cs3,tcs3;
     double posan1, posan2, posan3;
+
 
 //    Motor setup
     m1.Reset();
@@ -131,30 +137,32 @@ int main ()
         ep1=posan1-m1.GetPosition();
         cs1=ep1 > external1;
         ev1= cs1-m1.GetVelocity();
-        m1.SetTorque((ev1 > internal1));
+        tcs1=(ev1 > internal1);
+        m1.SetTorque(tcs1);
 
         ep2=posan2-m2.GetPosition();
         cs2=ep2 > external2;
         ev2= cs2-m2.GetVelocity();
-        m2.SetTorque((ev2 > internal2));
+        tcs2= (ev2 > internal2);
+        m2.SetTorque(tcs2);
 
         ep3=posan3-m3.GetPosition();
         cs3=ep3 > external3;
         ev3= cs3-m3.GetVelocity();
-        m3.SetTorque((ev3 > internal3));
+        tcs3= (ev3 > internal3);
+        m3.SetTorque(tcs3);
 
 
         cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
-        graph << t << " , " << posan1 << " , " << m1.GetPosition() << " , " << posan2 << " , " << m2.GetPosition()  << " , " << posan3 <<  " , " << m3.GetPosition()  << " , " << incli << " , " << incSensor   << " , " << orient   << " , " << oriSensor <<endl;
+        graph << t << " , " << posan1 << " , " << m1.GetPosition() << " , " << posan2 << " , " << m2.GetPosition()  << " , " << posan3 <<  " , " << m3.GetPosition()  << " , " << incli << " , " << incSensor   << " , " << orient   << " , " << oriSensor << " , " << ep1 << " , " << cs1 << " , " << ev1 << " , " << tcs1 << " , " << ep2 << " , " << cs2 << " , " << ev2 << " , " << tcs2 << " , " << ep3 << " , " << cs3 << " , " << ev3 << " , " << tcs3 <<endl;
 
         tools.WaitSamplingTime();
     }
 // }
-
-    sleep(2);
-
-
     cout << "FIN" << endl;
+    sleep(3);
+
+
     m1.SetTorque(0);
     m2.SetTorque(0);
     m3.SetTorque(0);

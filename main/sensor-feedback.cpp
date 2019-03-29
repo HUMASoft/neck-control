@@ -95,11 +95,11 @@ int main ()
     ToolsFControl tools;
     tools.SetSamplingTime(dts);
 
-    double incli = 14.5;
-    double orient = 300.8;
+    double incli = 15;
+    double orient = 200;
 
 
-    for (double t=0;t<5;t+=dts)
+    for (double t=0;t<25;t+=dts)
     {
 
         neck_ik.GetIK(incli,orient,lengths);
@@ -114,7 +114,7 @@ int main ()
         realAngle2=(l0-sensorLengths[1])*180/(0.01*M_PI);
         realAngle3=(l0-sensorLengths[2])*180/(0.01*M_PI);
 
-        cout << "incSensor " << incSensor  << ", oriSensor " << oriSensor <<endl;
+        cout << "Time " << t << "incSensor " << incSensor  << ", oriSensor " << oriSensor <<endl;
 
 //        cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
 //        cout << "l1 " << sensorLengths[0]  << ", l2 " << sensorLengths[1] << ", l3 " << sensorLengths[2]<<endl;
