@@ -22,7 +22,7 @@ int main ()
         double dts=0.01; //0.01
     ofstream graph("graph.csv",std::ofstream::out);
 
-    long incl_value=10;
+//    long incl_value=20;
 
     //--Controllers--
     //fpi w=25 pm=70 //kept from last experiments.
@@ -38,8 +38,10 @@ int main ()
 //    PIDBlock internal3(1,10,0,dts);
 
 //    string method("2isomw10p100");
-//    vector<double> npd ={0.7178 ,  -2.0893 ,  -1.3030  ,  2.9270};
-//    vector<double> dpd ={0.0337 , -0.9032 , 0.0631 , 1.0000};
+
+    //Fraccionario Externo IJARS
+//    vector<double> npd ={-0.1572, 1.2479, 0.1469, -4.3659, 3.1780};
+//    vector<double> dpd ={-0.0571, 0.4310, 0.1080, -1.4818, 1.0000};
 //    SystemBlock external1(npd,dpd,1);
 //    SystemBlock external2(npd,dpd,1);
 //    SystemBlock external3(npd,dpd,1);
@@ -49,17 +51,36 @@ int main ()
 //     PIDBlock external2(2,1,0.1,dts);
 //     PIDBlock external3(2,1,0.1,dts);
 
-    string method("w10p60pid"); // entero
-     PIDBlock external1(1.6940724,1.4599718,0.0155608,dts);
-     PIDBlock external2(1.6940724,1.4599718,0.0155608,dts);
-     PIDBlock external3(1.6940724,1.4599718,0.0155608,dts);
+    // entero IJARS
+    string method("w10p60pid");
+     PIDBlock external1(3.2158394,29.966573,0.0000061,dts);
+     PIDBlock external2(3.2158394,29.966573,0.0000061,dts);
+     PIDBlock external3(3.2158394,29.966573,0.0000061,dts);
+
+//////     fraccionario (kp,kf,exp)
+//    string method("w10p60pid");
+//     FPDBlock external1(2.988612,22.744199,-0.9041765,dts);
+//     FPDBlock external2(2.988612,22.744199,-0.9041765,dts);
+//     FPDBlock external3(2.988612,22.744199,-0.9041765,dts);
+
+//    // entero isatrans
+//    string method("w10p60pid");
+//    PIDBlock external1(1.95,7.76,0,dts);
+//    PIDBlock external2(1.95,7.76,0,dts);
+//    PIDBlock external3(1.95,7.76,0,dts);
+
+//     //     fraccionario (kp,kf,exp) isatrans
+//     string method("w10p60pid");
+//     FPDBlock external1(1.76,4.7872,-0.81,dts);
+//     FPDBlock external2(1.76,4.7872,-0.81,dts);
+//     FPDBlock external3(1.76,4.7872,-0.81,dts);
 
 
     //--savefiles--
-    string folder("/home/humasoft/Escritorio/");
-    ofstream targets (folder+method+".targets.csv");
-    ofstream responses (folder+method+".responses.csv");
-    ofstream controls (folder+method+".controls.csv");
+//    string folder("/home/humasoft/Escritorio/");
+//    ofstream targets (folder+method+".targets.csv");
+//    ofstream responses (folder+method+".responses.csv");
+//    ofstream controls (folder+method+".controls.csv");
 //    ofstream graph("graph.csv",std::ofstream::out);
 
 
@@ -101,7 +122,7 @@ int main ()
 
     long orient=1;
     long incli=1;
-    float lg0=0.109;
+    float lg0=0.107;
     sleep(4);
 
 
@@ -113,52 +134,63 @@ int main ()
 //    for (int i=1; i<incl_value; i++){
 //    incli ++;
     orient=90;
-    incli=incl_value; //comentar esta linea para el for anterior
+    double wptime=2;
+    vector<long> inclis={10,20,1};
+//    incli=incl_value; //comentar esta linea para el for anterior
 
 
 //    for (double t=0;t<200;t++){
-//           incSensor = tilt.ReadInclination();
-//            oriSensor = tilt.ReadOrientation();
+    //           incSensor = tilt.ReadInclination();
+    //            oriSensor = tilt.ReadOrientation();
 
-    for (double t=0;t<3;t+=dts){ //<0.05
+    for (int wp=0; wp<inclis.size(); wp++)
+    {
+        incli=inclis[wp];
 
-        tilt.readSensor(incSensor,oriSensor);
+        for (double t=0;t<wptime;t+=dts){ //<0.05
 
-
-    cout  << "incli " << incli << ",  orient " << orient  << endl;
-    cout << "incli_sen: " << incSensor << " , orient_sen: " << oriSensor <<  endl;
-    a.GetIK(incli,orient,lengths);
-    posan1=(lg0-lengths[0])*180/(0.01*M_PI);
-    posan2=(lg0-lengths[1])*180/(0.01*M_PI);
-    posan3=(lg0-lengths[2])*180/(0.01*M_PI);
-    cout << "TARGET: , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
+            tilt.readSensor(incSensor,oriSensor);
 
 
-        ep1=posan1-m1.GetPosition();
-        cs1=ep1 > external1;
-        ev1= cs1-m1.GetVelocity();
-        tcs1=(ev1 > internal1);
-        m1.SetTorque(tcs1);
-
-        ep2=posan2-m2.GetPosition();
-        cs2=ep2 > external2;
-        ev2= cs2-m2.GetVelocity();
-        tcs2= (ev2 > internal2);
-        m2.SetTorque(tcs2);
-
-        ep3=posan3-m3.GetPosition();
-        cs3=ep3 > external3;
-        ev3= cs3-m3.GetVelocity();
-        tcs3= (ev3 > internal3);
-        m3.SetTorque(tcs3);
+            cout  << "incli " << incli << ",  orient " << orient  << endl;
+            cout << "incli_sen: " << incSensor << " , orient_sen: " << oriSensor <<  endl;
+            a.GetIK(incli,orient,lengths);
+            posan1=(lg0-lengths[0])*180/(0.01*M_PI);
+            posan2=(lg0-lengths[1])*180/(0.01*M_PI);
+            posan3=(lg0-lengths[2])*180/(0.01*M_PI);
+            cout << "TARGET: , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
 
-        cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
-        graph << t << " , " << posan1 << " , " << m1.GetPosition() << " , " << posan2 << " , " << m2.GetPosition()  << " , " << posan3 <<  " , " << m3.GetPosition()  << " , " << incli << " , " << incSensor   << " , " << orient   << " , " << oriSensor << " , " << ep1 << " , " << cs1 << " , " << ev1 << " , " << tcs1 << " , " << ep2 << " , " << cs2 << " , " << ev2 << " , " << tcs2 << " , " << ep3 << " , " << cs3 << " , " << ev3 << " , " << tcs3 <<endl;
+            ep1=posan1-m1.GetPosition();
+            cs1=ep1 > external1;
+            ev1= cs1-m1.GetVelocity();
+            tcs1=(ev1 > internal1);
+            m1.SetTorque(tcs1);
 
-        tools.WaitSamplingTime();
-    }
-// }
+            ep2=posan2-m2.GetPosition();
+            cs2=ep2 > external2;
+            ev2= cs2-m2.GetVelocity();
+            tcs2= (ev2 > internal2);
+            m2.SetTorque(tcs2);
+
+            ep3=posan3-m3.GetPosition();
+            cs3=ep3 > external3;
+            ev3= cs3-m3.GetVelocity();
+            tcs3= (ev3 > internal3);
+            m3.SetTorque(tcs3);
+
+
+            cout << "ACTUAL: , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl<<endl;
+            graph << t << " , " << posan1 << " , " << m1.GetPosition() << " , " << posan2 << " , " << m2.GetPosition()  << " , " << posan3 <<  " , " << m3.GetPosition()  << " , " << incli << " , " << incSensor   << " , " << orient   << " , " << oriSensor << " , " << ep1 << " , " << cs1 << " , " << ev1 << " , " << tcs1 << " , " << ep2 << " , " << cs2 << " , " << ev2 << " , " << tcs2 << " , " << ep3 << " , " << cs3 << " , " << ev3 << " , " << tcs3 <<endl;
+
+            tools.WaitSamplingTime();
+        } //for (double t=0;t<5;t+=dts){ //<0.05
+
+
+        // } //for (double t=0;t<200;t++)
+
+    }  //    for (int wp=0; wp<inclis.size(); wp++)
+
     cout << "FIN" << endl;
     sleep(3);
 
@@ -169,8 +201,8 @@ int main ()
 
     sleep(1);
 
-    targets.close();
-    controls.close();
-    responses.close();
+//    targets.close();
+//    controls.close();
+//    responses.close();
     return 0;
 }

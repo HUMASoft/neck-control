@@ -4,7 +4,7 @@
 #include "SocketCanPort.h"
 #include "mainlib.h"
 #include "math.h"
-
+#include "SerialArduino.h"
 
 
 //    m1.Reset();
@@ -21,6 +21,10 @@
 int main ()
 {
 
+    //--sensors--
+    SerialArduino tilt;
+    float incSensor,oriSensor;
+
     ofstream graph("graph.csv",std::ofstream::out);
     SocketCanPort pm1("can1");
     CiA402Device m1 (1, &pm1);
@@ -29,6 +33,7 @@ int main ()
     SocketCanPort pm3("can1");
     CiA402Device m3 (3, &pm3);
 
+    sleep(4);
 
     TableKinematics a("../neck-control/arco107.csv");
     vector<double> lengths(3);
@@ -66,6 +71,8 @@ int main ()
 
     for (int i=0;i<13;i++) //18
     {
+        tilt.readSensor(incSensor,oriSensor);
+
         a.GetIK(incli,orient,lengths);
         cout << "l1 " << lengths[0]  << ", l2 " << lengths[1] << ", l3 " << lengths[2]<<endl;
         double posan1, posan2, posan3;
@@ -85,9 +92,11 @@ int main ()
         double dts=0.01;
         for (double t=0;t<2;t+=dts)
         {
+            tilt.readSensor(incSensor,oriSensor);
             usleep(dts*1000*1000);
             cout  << " orin: " << orient <<endl;
             cout  << " incl: " << incli <<endl;
+            cout << "incli_sen: " << incSensor << " , orient_sen: " << oriSensor <<  endl;
             cout  << " Real: " << t << " , " << m1.GetPosition() << " , " << m2.GetPosition() <<  " , " << m3.GetPosition() <<endl;
             cout << " Consigna: " << t << " , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
 
